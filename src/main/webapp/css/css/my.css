@@ -1,0 +1,20 @@
+.slides .operate-project,.slides .operate-user{
+	width: 100%;
+	height: 200px;
+	background-color: transparent;
+	padding-left: 20px;
+}
+
+.slides .operate-project >li,.slides .operate-user>li{
+	width: 100%;
+	height: 50px;
+	font-size: 20px;
+	color: white;
+}
+a{
+	color: white;
+}
+a:hover {
+ text-decoration: underline;
+ color: #FAEBCC;
+}

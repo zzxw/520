@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="cn.bs.dao.WorkerDao">
+	<insert id="regist"
+		parameterType="cn.bs.entity.Worker">
+		insert into worker
+			(uName,pwd,phone,mail) 
+		values
+			(#{uName},#{pwd},#{phone},#{mail})
+	</insert>
+	
+	<!-- <delete id="deleteWorker" parameterType="int">
+	    delete 
+	    from worker 
+	    where 
+	    uid =#{uid}
+	</delete> -->
+	
+	<update id="update" parameterType="cn.bs.entity.Worker">
+	    update	worker 
+	    <set>
+	    	<if test="uName != null">uName = #{uName},</if>
+	    	<if test="pwd != null">pwd = #{pwd},</if>
+	    	<if test="mail != null">mail = #{mail},</if>
+	    	<if test="phone != null">phone = #{phone}</if>
+	    </set>
+	    where id=#{id}
+	</update>
+	
+	<select id="findUser"	
+		resultType="cn.bs.entity.Worker">
+		select * from  worker
+	</select>
+	
+	<select id="findByName"	
+		parameterType="String"
+		resultType="cn.bs.entity.Worker">
+		select *
+			from
+		worker
+			where uName=#{uName}
+	</select>
+		
+</mapper>

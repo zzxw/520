@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="cn.bs.dao.ProjectDao">
+	<insert id="add"
+		parameterType="cn.bs.entity.Project">
+		insert into projects
+(uid,checkId,authorizedId,majorType,pName,pType,unitName,contacts,cPhone,status,blueprint) 
+values
+(#{uid},#{checkId},#{authorizedId},#{majorType},#{pName},#{pType},#{unitName},#{contacts},#{cPhone},#{status},#{blueprint})
+	</insert>
+	<delete id="delete" parameterType="int">
+	    delete 
+	    	from projects 
+	    where 
+	    	pid = #{pid}
+	</delete>
+	
+	<update id="update" parameterType="cn.bs.entity.Project">
+	    update  projects 
+    	<set>
+    		<if test="uid != null">uid = #{uid>,</if>
+    		<if test="checkId != null">checkId = #{checkId>,</if>
+    		<if test="authorizedId != null">authorizedId = #{authorizedId>,</if>
+    		<if test="majorType != null">majorType = #{majorType>,</if>
+    		<if test="pName != null">pName = #{pName>,</if>
+    		<if test="pType != null">pType = #{pType>,</if>
+    		<if test="cPhone != null">cPhone = #{cPhone>,</if>
+    		<if test="status != null">status = #{status>,</if>
+    		<if test="contacts != null">contacts = #{contacts>,</if>
+    		<if test="unitName != null">unitName = #{unitName>,</if>
+    		<if test="blueprint != null">blueprint = #{blueprint></if>
+    	</set>
+    		where pid=#{pid}
+	</update>
+	
+	<select id="search"	
+		parameterType="int"
+		resultType="cn.bs.entity.Project">
+		select *
+			from
+		projects
+			where
+		pid = #{pid}
+	</select>
+	
+	<select id="findProjects"	
+		resultType="cn.bs.entity.Project">
+		select * from projects
+	</select>
+	<select id="findProjectsByStatus"
+		parameterType="int"
+		resultType="cn.bs.entity.Project">
+		select * from projects where status = #{status}
+	</select>
+	
+	
+	<select id="statistics"
+		resultType="hashmap">
+		select count(*),status from projects group by status
+	</select>
+	
+	<select id="getTotal"
+		parameterType="int"
+		resultType="list">
+		select count(*),status from projects where (uid=#{id} or checkid=#{id} or authorizedId=#{id})group by status
+	</select>
+</mapper>

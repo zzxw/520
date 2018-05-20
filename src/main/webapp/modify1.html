@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>图纸管理系统</title>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/fontAwesome.css">
+        <link rel="stylesheet" href="css/light-box.css">
+        <link rel="stylesheet" href="css/templatemo-main.css">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+		<link rel="stylesheet" href="css/my.css" />
+        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <style>
+        	.table-striped tbody tr:nth-child(even) td,
+			.table-striped tbody tr:nth-child(even) th {background-color:#D4FFFF;}
+			.table-striped tbody tr:nth-child(odd) td,
+			.table-striped tbody tr:nth-child(odd) th {background-color:#D4BFFF;}
+        </style>
+        
+    </head>
+
+<body>
+    
+    <div class="sequence">
+  
+      <div class="seq-preloader">
+        <svg width="39" height="16" viewBox="0 0 39 16" xmlns="http://www.w3.org/2000/svg" class="seq-preload-indicator"><g fill="#F96D38"><path class="seq-preload-circle seq-preload-circle-1" d="M3.999 12.012c2.209 0 3.999-1.791 3.999-3.999s-1.79-3.999-3.999-3.999-3.999 1.791-3.999 3.999 1.79 3.999 3.999 3.999z"/><path class="seq-preload-circle seq-preload-circle-2" d="M15.996 13.468c3.018 0 5.465-2.447 5.465-5.466 0-3.018-2.447-5.465-5.465-5.465-3.019 0-5.466 2.447-5.466 5.465 0 3.019 2.447 5.466 5.466 5.466z"/><path class="seq-preload-circle seq-preload-circle-3" d="M31.322 15.334c4.049 0 7.332-3.282 7.332-7.332 0-4.049-3.282-7.332-7.332-7.332s-7.332 3.283-7.332 7.332c0 4.05 3.283 7.332 7.332 7.332z"/></g></svg>
+      </div>
+      
+    </div>
+    
+  
+        <nav>
+          <div class="logo">
+              <img src="img/logo.png" alt="">
+          </div>
+          <div class="mini-logo">
+              <img src="img/mini_logo.png" alt="">
+          </div>
+          <ul>
+            <li><a href="" onclick="window.location.href='index.html#1'"><i class="fa fa-home"></i> <em>Home</em></a></li>
+            <li><a href="" onclick="window.location.href='index.html#2'"><i class="fa fa-image"></i> <em>Profile</em></a></li>
+            <li><a href="" onclick="window.location.href='index.html#3'"><i class="fa fa-user"></i> <em>user Manager</em></a></li>
+          </ul>
+        </nav>
+        
+        <div class="slides">
+          <div class="slide" id="1">
+            <div class="content first-content">
+              <div class="container-fluid">
+                  <div class="col-md-9">
+                      <div class="viewProjects">
+                      	<table class="table table-striped">
+          				<thead align="center">
+							<tr style="color:yellow">
+								<th>项目名称</th>
+								<th>单位名称</th>
+								<th>联系人</th>
+								<th>联系方式</th>
+								<th>项目类型</th>
+							</tr>
+						</thead>
+						<tbody class="projectBody">
+						</tbody>
+          			</table>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide" id="2">
+            <div class="content first-content">
+              <div class="container-fluid">
+                  <div class="col-md-3">
+                      <div class="author-image"><img src="img/author_image.png" alt=""></div>
+                  </div>
+                  <div class="col-md-9">
+                      <h2>Overview</h2>
+                      <ul class="operate-user">
+                      </ul>
+                      <div id="graph" style="width: 400px; height: 400px;"></div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide" id="3">
+          	<div class="content fourth-content">
+          		<div id="graph" style="width: 400px; height: 400px;"></div>
+          	</div>
+          </div>
+          <div class="slide" id="4">
+            <div class="content fifth-content">
+                <div class="container-fluid">
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6">
+                        <form id="contact" action="" method="post">
+                            <div class="row">
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="name" type="text" class="form-control" id="pName" placeholder="项目名称" required="">
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="unitName" type="text" class="form-control" id="unitName" placeholder="项目单位" required="">
+                                  </fieldset>
+                                </div>
+                                 <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="contacts" type="text" class="form-control" id="contacts" placeholder="联系人" required="">
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="cPhone" type="tel" rows="6" class="form-control" id="cPhone" placeholder="手机号" required="" onblur="phoneCheck();"></input>
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="major" type="text" rows="6" class="form-control" id="pType" placeholder="专业类别" required=""></input>
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="uId" type="text" rows="6" class="form-control" id="uId" placeholder="设计人员" required=""></input>
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="checkId" type="text" rows="6" class="form-control" id="checkId" placeholder="审图人员" required=""></input>
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="authorizedId" type="text" rows="6" class="form-control" id="authorizedId" placeholder="审核人员" required=""></input>
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <button id="form-submit" class="btn">增加工程</button>
+                                  </fieldset>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+	     <div class="slide" id="5">
+          	<div class="content fourth-content">
+          		<div class="modifyProject">
+          			<table class="table table-striped">
+          				<thead align="center">
+							<tr style="color:yellow">
+								<th>项目名称</th>
+								<th>单位名称</th>
+								<th>联系人</th>
+								<th>联系方式</th>
+								<th>项目类型</th>
+							</tr>
+						</thead>
+						<tbody class="projectBody">
+						</tbody>
+          			</table>
+          		</div>
+          	</div>
+          </div>
+        </div>
+
+        <div class="footer">
+         <!-- <div class="content">
+              <p>Copyright &copy; 2018 Your Company . <a href="#">Moonlight</a> by <a href="#" target="_parent">HTML5 Max</a></p>
+              <div class="tlinks"><p>CorpRigth?2018HyitFz</p></div>
+          </div>-->
+        </div>
+
+    
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+    <script src="js/vendor/bootstrap.min.js"></script>
+    
+    <script src="js/datepicker.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/echarts.js" ></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('.scroll-link').on('click', function(event){
+            event.preventDefault();
+            var sectionID = $(this).attr("data-id");
+            scrollToID('#' + sectionID, 750);
+        });
+        $('.scroll-top').on('click', function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop:0}, 'slow');         
+        });
+        $('#nav-toggle').on('click', function (event) {
+            event.preventDefault();
+            $('#main-nav').toggleClass("open");
+        });
+    });
+    // scroll function
+    function scrollToID(id, speed){
+        var offSet = 0;
+        var targetOffset = $(id).offset().top - offSet;
+        var mainNav = $('#main-nav');
+        $('html,body').animate({scrollTop:targetOffset}, speed);
+        if (mainNav.hasClass("open")) {
+            mainNav.css("height", "1px").removeClass("in").addClass("collapse");
+            mainNav.removeClass("open");
+        }
+    }
+    if (typeof console === "undefined") {
+        console = {
+            log: function() { }
+        };
+    }
+    function phoneCheck(){
+    	var cPhone = $("#cPhone").val();
+    	if(cPhone == null || typeof(cPhone)=='undefined' || cPhone.trim() == '') {
+    		alert("手机号不能为空!!!!");
+    	}
+    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+    	if(!cPhone.match(phoneReg)){
+    		alert("手机号格式不正确，请填写正确的手机号");
+    	}
+    }
+    function isEmpty(data){
+    	if(data == null || typeof(data) == 'undefined' || data.trim()==''){
+    		return true;
+    	}
+    	return false;
+    }
+    $("#form-submit").click(function(){
+    	var pName = $("#pName");
+    	var unitName = $("#unitName");
+    	var contacts = $("#contacts");
+    	var cPhone = $("#cPhone");
+    	var pType = $("#pType");
+    	var uId = $("#uId");
+    	var checkId = $("#checkId");
+    	var authorizedId = $("#authorizedId");
+    	if(isEmpty(pName.val()) || isEmpty(unitName.val()) || isEmpty(contacts.val()) || isEmpty(cPhone.val()) || isEmpty(pType).val()) {
+    		alert("所有字段均需填写");
+    		return;
+    	}
+    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+    	if(!cPhone.val().match(phoneReg)){
+    		alert("手机号格式不正确，请填写正确的手机号");
+    	}
+    	$.ajax({
+    		type:"get",
+    		url:"Project/add.do",
+    		async:true,
+    		dataType : 'json',
+    		data : {
+    			pName : pName.val(),
+    			unitName : unitName.val(),
+    			contacts : contacts.val(),
+    			cPhone : cPhone.val(),
+    			pType : cType.val(),
+    			uId : uId.val(),
+    			checkId : checkId.val(),
+    			authorizedId : authorizedId.val()
+    		},
+        	success:function(result){
+        		if(result.state == 0){
+        			pName.val('');
+        			unitName.val('');
+        			contacts.val('');
+        			cPhone.val('');
+        			pType.val('');
+        			uId.val('');
+        			checkId.val('');
+        			authorizedId.val('');
+        			window.location.href="index.html";
+        		}else{
+        			alert(result.message);
+        		}
+        	},
+        	error:function(){
+        		alert("发生了未知的错误，请重新尝试");
+        	}
+    	});
+    });
+    function view(status){
+    	$.ajax({
+    		type:"get",
+    		url:"Project/searchProjectsByStatus.do",
+    		async:true,
+    		data:{
+    			status:status
+    		},
+    		dataType:'json',
+    		success:function(result){
+    			if(result.status == 0){
+    				
+    			}else{
+    				alert(result.message);
+    			}
+    		},
+    		error:function(){
+    			alert('发生了未知错误，请检查网络后重新尝试');
+    		}
+    	});
+    }
+    </script>
+</body>
+</html>

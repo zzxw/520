@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="cn.bs.dao.NUserDao">
+	<insert id="regist"
+		parameterType="cn.bs.entity.NUser">
+		insert into users
+			(uName,pwd,phone,mail,address,major,userType) 
+		values
+			(#{uName},#{pwd},#{phone},#{mail},#{address},#{major},#{userType})
+	</insert>
+	
+	<!-- <delete id="deleteOrder" parameterType="int">
+	    delete 
+	    from users 
+	    where 
+	    id =#{id}
+	</delete> -->
+	<update id="changePwd" parameterType="string">
+		update users 
+		set pwd=#{1} where uName=#{0}
+	</update>
+	<update id="updateInfo" parameterType="cn.bs.entity.NUser">
+	    update 
+	    	users 
+	    <set>
+	    	<if test="phone != null">phone=#{phone},</if>
+	    	<if test="mail != null">mail=#{mail},</if>
+	    	<if test="address != null">address=#{address},</if>
+	    	<if test="userType != null">userType=#{userType},</if>
+	    	<if test="major != null">major=#{major}</if>
+	    </set> 
+		    where uid=#{uid}
+	</update>
+	
+	<select id="findByName"	
+		parameterType="string"
+		resultType="cn.bs.entity.NUser">
+		select *
+			from
+		users
+		where
+			uName = #{uName}
+	</select>
+	<select id="findUsersByMajor"
+		parameterType="string"	
+		resultType="cn.bs.entity.NUser">
+		select * from users where major = #{major}
+	</select>
+	
+	<select id="findUsersByType"
+		parameterType="int"
+		resultType="cn.bs.entity.NUser">
+		select * from users where userType=#{userType}		
+	</select>
+		
+</mapper>

@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html>
+
+<!-- Head -->
+<head>
+
+	<title>图纸审查系统</title>
+
+	<!-- Meta-Tags -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>
+		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<!-- //Meta-Tags -->
+
+	<!-- Style --> <link rel="stylesheet" href="css/login.css" type="text/css" media="all">
+
+
+
+</head>
+<!-- //Head -->
+
+<!-- Body -->
+<body>
+
+	<h1>图纸审查系统</h1>
+
+	<div class="container w3layouts agileits">
+		<div class="copyrights">Collect from <a href="http://www.cssmoban.com/" >企业网站模板</a></div>
+		<div class="register w3layouts agileits">
+			<h2>注 册</h2>
+			<form action="#" method="post">
+				<input type="text" class="name"Name="Name" placeholder="用户名" required="">
+				<input type="password" class="pwd" Name="Password" placeholder="密码" required="">
+				<input type="text" class="phone" Name="Phone Number" placeholder="手机号码" required="">
+				<input type="text" class="mail" Name="Email" placeholder="邮箱" required="">
+				<input type="text" class="add" Name="Address" placeholder="地址" required="">
+				<input type="text" class="majorType" Name="Major" placeholder="专业类别" required="">
+				<!--<label>用户身份</label>审查人员<input class="radio2" type="radio" name="radio2" value="radio单选项1"/>
+				审核人员<input class="radio2" type="radio" name="radio2" value="radio单选项1"/>-->
+				<!--<input type="text" Name="UserType" placeholder="用户身份" required="">-->
+			</form>
+			<div class="send-button w3layouts agileits">
+				<input type="button" value="免费注册" onclick="submit();">
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+
+	</div>
+
+	<div class="footer w3layouts agileits">
+		<!--<p>Copyright &copy; More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>-->
+	</div>
+
+</body>
+<!-- //Body -->
+<script>
+	function check() {
+		var uName = $(".name").val();
+		if(uName.trim() ==''){
+			alert('用户名不能为空');
+			return false;
+		}
+		var pwd = $(".pwd").val();
+		if(pwd.trim() == ''){
+			alert('密码不能为空');
+			return false;
+		}
+		var pwdReg = '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$';
+		if(!pwd.match(pwdReg)){
+			alert('密码要在8-16字符之间，且必须为数字和字母的组合');
+			return false;
+		}
+		var phone = $(".phone").val();
+		if(phone.trim() == ''){
+			alert('手机号不能为空');
+			return false;
+		}
+		var phoneReg = '^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$';
+		if(!phone.match(phoneReg)){
+			alert('请输入正确的手机号');
+			return false;
+		}
+		var mail = $(".mail").val();
+		if(mail.trim() == ''){
+			alert('邮箱不能为空');
+			return false;
+		}
+		var mailReg = '^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$';
+		if(!mail.match(mailReg)){
+			alert('邮箱格式不正确，请重新输入');
+			return false;
+		}
+		var address = $(".add").val();
+		if(address.trim() == ''){
+			alert('邮箱不能为空');
+			return false;
+		}
+		var major = $(".majorType").val();
+		if(major.trim() == ''){
+			alert('邮箱不能为空');
+			return false;
+		}
+		return true;
+	}
+	function submit() {
+		if(!check()){
+			return;
+		}
+		var data = {
+			uName : $(".name").val(),
+			pwd : $(".pwd").val(),
+			phone : $(".phone").val(),
+			mail : $(".mail").val(),
+			address : $(".add").val(),
+			major : $(".majorType").val()
+		}
+		$.ajax({
+			type:"post",	
+			url:"nUser/regist.do",
+			async:true,
+			data : data,
+			dataType : 'json',
+			success:function(result) {
+				if(result.state == 0){
+					window.location.href = 'userLogin.html?uName=' + $(".name").val();
+				}else{
+					alert(result.message);
+				}
+			}
+		});
+	}
+</script>
+</html>
