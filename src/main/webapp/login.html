@@ -35,7 +35,7 @@
 				<input type="password"class="Password" Name="Password" placeholder="密码" required="" onblur="checkPwd();" onfocus="clear();"><span id="pwdInfo" style="color:#F00"></span>
 			</form>
 			<div class="send-button w3layouts agileits">
-				<input type="button" onclick="submit();" value="登录">
+				<input type="button" onclick="submit();" value="登录"/>
 			</div>
 			<div class="clear"></div>
 		</div><div class="copyrights">Collect from <a href="http://www.cssmoban.com/" >CopyRight@Hyit2018 Fz</a></div>
@@ -51,7 +51,7 @@
 <script>
 		var obj = getParameter();
 		if(obj.hasOwnProperty('uName')){
-			$(".Username").val(obj.uName);'
+			$(".Username").val(obj.uName);
 		}
 		function clear() {
 			$("#userInfo").html('');

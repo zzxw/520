@@ -15,7 +15,7 @@ import cn.bs.util.JsonResult;
 
 @Controller
 @RequestMapping("/nUser")
-public class NUserController {
+public class NUserController extends BaseController{
 	@Resource
 	private NUserService nService;
 	

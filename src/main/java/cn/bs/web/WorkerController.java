@@ -14,7 +14,7 @@ import cn.bs.util.JsonResult;
 
 @Controller
 @RequestMapping("/worker")
-public class WorkerController {
+public class WorkerController extends BaseController{
 	@Resource
 	private WorkerService workService;
 	

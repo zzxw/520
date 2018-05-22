@@ -7,7 +7,11 @@ import javax.annotation.Resource;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import cn.bs.entity.Project;
 import cn.bs.service.ProjectService;
@@ -15,7 +19,7 @@ import cn.bs.util.JsonResult;
 
 @Controller
 @RequestMapping("/Project")
-public class ProjectController {
+public class ProjectController extends BaseController{
 	
 	@Resource
 	private ProjectService projectService;
@@ -81,16 +85,20 @@ public class ProjectController {
 	
 	@RequestMapping("/searchProjects.do")
 	@ResponseBody
-	public JsonResult<List<Project>> searchProjects(){
+	public JsonResult<PageInfo> searchProjects(@RequestParam(value="pn", defaultValue="1")Integer pn){
+		PageHelper.startPage(pn,5);
 		List<Project> list = projectService.findProjects();
-		return new JsonResult<List<Project>>(list);
+		PageInfo<List<Project>> page = new PageInfo(list,5);
+		return new JsonResult<PageInfo>(page);
 	}
 	
 	@RequestMapping("/searchProjectsByStatus.do")
 	@ResponseBody
-	public JsonResult<List<Project>> searchProjects(Integer status){
+	public JsonResult<PageInfo> searchProjects(@RequestParam(value="pn", defaultValue="1")Integer pn,Integer status){
+		PageHelper.startPage(pn,5);
 		List<Project> list = projectService.findProjectsByStatus(status);
-		return new JsonResult<List<Project>>(list);
+		PageInfo<List<Project>> page = new PageInfo(list,5);
+	 	return new JsonResult<PageInfo>(page);
 	}
 	
 	@RequestMapping("/statistics.do")
@@ -105,5 +113,14 @@ public class ProjectController {
 	public JsonResult<Boolean> uploadImg(HttpRequest request){
 		//List<Project> list = projectService.findProjectsByStatus(status);
 		return new JsonResult<Boolean>(true);
+	}
+	
+	@RequestMapping("/test.do")
+	@ResponseBody
+	public JsonResult<PageInfo<List<Project>>> searchByPage(@RequestParam(value="pn", defaultValue="1")Integer pn){
+		PageHelper.startPage(pn,5);
+		List<Project> list = projectService.findProjects();
+		PageInfo<List<Project>> page = new PageInfo(list,5);
+		return new JsonResult<PageInfo<List<Project>>>(page);
 	}
 }
