@@ -84,7 +84,32 @@
           </div>
           <div class="slide" id="3">
           	<div class="content fourth-content">
-          		<div id="graph" style="width: 400px; height: 400px;"></div>
+          		<div class="col-md-6">
+                        <form id="contact" action="" method="post">
+                            <div class="row">
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="uid" type="text" class="form-control" id="uid" placeholder="用户id" required="" disabled="disabled">
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="uName" type="text" class="form-control" id="uName" placeholder="用户名" required="" disabled="disabled">
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="phone" type="tel" rows="6" class="form-control" id="phone" placeholder="手机号" required=""></input>
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <input name="mail" type="text" rows="6" class="form-control" id="mail" placeholder="用户邮箱" required=""></input>
+                                  </fieldset>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
           	</div>
           </div>
           <div class="slide" id="4">
@@ -275,6 +300,26 @@
         	}
         });*/
     	}
+    	var a3Class = $("#a3").attr('class');
+    	if(typeof(a3Class)!='undefined' && a3Class == 'attr'){
+    		var uName = document.cookie.split("=")[1];
+    		$.ajax({
+    			type:"get",
+    			url:"/worker/find.do",
+    			async:true,
+    			dataType : 'json',
+    			data : {
+    				name : uName
+    			},
+    			success : function(result) {
+    				var data = result.data;
+    				$("input#uid").val(data.uid);
+    				$("input#uName").val(data.uName);
+    				$("input#phone").val(data.phone);
+    				$("input#mail").val(data.mail);
+    			}
+    		});
+    	}
         var href = location.href;
         if(href.indexOf("#")!=-1){
         	var id = href.substr(href.indexOf('#')+1);
@@ -377,8 +422,12 @@
         	}
     	});
     });
+    function modify(){
+    	
+    }
     function view(status,pageNo){
     	var tbody = $(".projectBody");
+    	if(typeof(pageNo)=='undefined' || !Number.isNaN(pageNo)){
     		pageNo = 1;
     	}
     	$.ajax({
@@ -392,17 +441,37 @@
     		dataType:'json',
     		success:function(result){
     			if(result.state == 0){
-    				var data = result.data;
+    				tbody.empty();
+    				var data = result.data.list;
     				data = eval('(' + data + ')');
     				for(var i=0;i<data.length;i++){
     					var item = data[i];
     					var tr = $("<tr></tr>");
-    					tr.append("<td>" + data[i].pName + "</td>");
-    					tr.append("<td>" + data[i].unitName + "</td>");
-    					tr.append("<td>" + data[i].contacts + "</td>");
-    					tr.append("<td>" + data[i].cPhone + "</td>");
-    					tr.append("<td>" + data[i].pType + "</td>");
+    					tr.append($("<td style='display:none'>" + data[i].pid + "</td>"));
+    					tr.append($("<td>" + data[i].pName + "</td>"));
+    					tr.append($("<td>" + data[i].unitName + "</td>"));
+    					tr.append($("<td>" + data[i].contacts + "</td>"));
+    					tr.append($("<td>" + data[i].cPhone + "</td>"));
+    					tr.append($("<td>" + data[i].pType + "</td>"));
+    					tr.append($("<td>" + data[i].uid + "</td>"));
+    					tr.append($("<td>" + data[i].checkId + "</td>"));
+    					tr.append($("<td>" + data[i].authorizedId + "</td>"));
+    					tr.apend($("<td><button class='modify' onclick='modify(this)'>修改</button></td>"));
     					tbody.append(tr);
+    				}
+    				var page = $(".pagination");
+    				//page.append($("<li class=''>&laquo;</a></li>"));
+    				for(var i=1;i<=result.data.lastPage;i++){
+    					page.append($("<li class='>"+i+"'></li>"));
+    				}
+    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
+    				var ul = $("li");
+    				for(var i=0;i<ul.length;i++){
+    					var li = ul.get(i);
+    					li.addEventListener('click',function(evt){
+							var pn = this.getAttribute('class');
+							view(0,pn);
+						});
     				}
     			}else{
     				alert(result.message);
