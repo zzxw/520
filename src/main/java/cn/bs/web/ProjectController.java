@@ -30,10 +30,10 @@ public class ProjectController extends BaseController{
 	//返回值：{state:1,message:"用户名..."}
 
 	public JsonResult<Project> add(Integer uid,Integer checkId,Integer authorizedId,String majorType,String pName,
-			Integer pType,String unitName,String contacts,String cPhone,Integer status,String blueprint){
+			Integer pType,String unitName,String contacts,String cPhone,Integer status){
 		Project project = new Project();
 		project.setAuthorizedId(authorizedId);
-		project.setBlueprint(blueprint);
+		//project.setBlueprint(blueprint);
 		project.setCheckId(checkId);
 		project.setContacts(contacts);
 		project.setcPhone(cPhone);
@@ -53,7 +53,7 @@ public class ProjectController extends BaseController{
 	@ResponseBody
 	public JsonResult<Project> update(
 			Integer uid,String name,Integer checkId,Integer authorizedId,Integer pid,String majorType,String pName,
-			Integer pType,String unitName,String contacts,String cPhone,Integer status,String blueprint){
+			Integer pType,String unitName,String contacts,String cPhone,Integer status,String blueprint,String advise){
 		Project project = new Project();
 		project.setPid(pid);
 		project.setAuthorizedId(authorizedId);
@@ -67,6 +67,7 @@ public class ProjectController extends BaseController{
 		project.setStatus(status);
 		project.setUid(uid);
 		project.setUnitName(unitName);
+		project.setAdvise(advise);
 		projectService.update(project);
 		return new JsonResult<Project>(project);
 	}

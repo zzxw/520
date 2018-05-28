@@ -13,6 +13,7 @@ public class Project {
 	private String cPhone;
 	private Integer status;
 	private String blueprint;
+	private String advise;
 	
 	public Project() {
 		super();
@@ -20,7 +21,7 @@ public class Project {
 
 	
 	public Project(Integer pid, Integer uid, Integer checkId, Integer authorizedId, String majorType, String pName, Integer pType,
-			String unitName, String contacts, String cPhone, Integer status, String blueprint) {
+			String unitName, String contacts, String cPhone, Integer status, String blueprint,String advise) {
 		super();
 		this.pid = pid;
 		this.uid = uid;
@@ -34,6 +35,7 @@ public class Project {
 		this.cPhone = cPhone;
 		this.status = status;
 		this.blueprint = blueprint;
+		this.advise = advise;
 	}
 
 
@@ -140,6 +142,15 @@ public class Project {
 	public void setcPhone(String cPhone) {
 		this.cPhone = cPhone;
 	}
+	
+	public String getAdvise() {
+		return advise;
+	}
+
+	public void setAdvise(String advise) {
+		this.advise = advise;
+	}
+
 
 	@Override
 	public String toString() {

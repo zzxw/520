@@ -6,9 +6,9 @@
 	<insert id="add"
 		parameterType="cn.bs.entity.Project">
 		insert into projects
-(uid,checkId,authorizedId,majorType,pName,pType,unitName,contacts,cPhone,status,blueprint) 
+(uid,checkId,authorizedId,majorType,pName,pType,unitName,contacts,cPhone,status) 
 values
-(#{uid},#{checkId},#{authorizedId},#{majorType},#{pName},#{pType},#{unitName},#{contacts},#{cPhone},#{status},#{blueprint})
+(#{uid},#{checkId},#{authorizedId},#{majorType},#{pName},#{pType},#{unitName},#{contacts},#{cPhone},#{status})
 	</insert>
 	<delete id="delete" parameterType="int">
 	    delete 
@@ -31,6 +31,7 @@ values
     		<if test="contacts != null">contacts = #{contacts>,</if>
     		<if test="unitName != null">unitName = #{unitName>,</if>
     		<if test="blueprint != null">blueprint = #{blueprint></if>
+    		<if test="advise != null">advise = #{advise}</if>
     	</set>
     		where pid=#{pid}
 	</update>
