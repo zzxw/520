@@ -30,89 +30,85 @@
 
 		<div class="login w3layouts agileits">
 			<h2>登 录</h2>
-			<form action="#" method="post">
-				<input type="text" class="Username" Name="Username" placeholder="用户名" required="" onblur="checkUserName();"><span id="userInfo"  style="color:#F00"></span>
-				<input type="password" class="Password" Name="Password" placeholder="密码" required=""onblur="checkPwd();"><span id="pwdInfo"  style="color:#F00"></span>
+			<form>
+				<input type="text" class="Username" Name="Username" placeholder="用户名" required="" onblur="checkUserName();" onfocus="clear();"><span id="userInfo" style="color:#F00"></span>
+				<input type="password"class="Password" Name="Password" placeholder="密码" required="" onblur="checkPwd();" onfocus="clear();"><span id="pwdInfo" style="color:#F00"></span>
 			</form>
 			<div class="send-button w3layouts agileits">
-				<input type="button" onclick="submit();" value="登 录">
-				<input type="button" value="注册" onclick="regist();"/>
+				<input type="button" onclick="submit();" value="登录"/>
 			</div>
 			<div class="clear"></div>
-		</div><!--<div class="copyrights">Collect from <a href="http://www.cssmoban.com/" >CopyRight@Hyit2018 Fz</a></div>-->
+		</div><div class="copyrights">Collect from <a href="http://www.cssmoban.com/" >CopyRight@Hyit2018 Fz</a></div>
 		<div class="clear"></div>
 
 	</div>
 
 	<div class="footer w3layouts agileits">
-		<!--<div class="copyrights">Collect from <a href="http://www.cssmoban.com/" >CopyRight@Hyit2018 Fz</a></div>-->
+		<div class="copyrights">Collect from <a href="http://www.cssmoban.com/" >CopyRight@Hyit2018 Fz</a></div>
 	</div>
 
 </body>
 <script>
-	var obj = getParameter();
-	if(obj.hasOwnProperty('uName')){
-		$(".Username").val(obj.uName);'
-	}
-	function clear() {
-			console.log(1);
+		var obj = getParameter();
+		if(obj.hasOwnProperty('uName')){
+			$(".Username").val(obj.uName);
+		}
+		function clear() {
 			$("#userInfo").html('');
 			$("#pwdInfo").html('');
 		}
-	function getParameter(){
-    	var url = location.search;    
-   		var theRequest = new Object();   
-   		if (url.indexOf("?") != -1) {   
-      		var str = url.substr(1);   
-      		strs = str.split("&");   
-      		for(var i = 0; i < strs.length; i ++) {   
-         		theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
-      		}   
-  		}   
-   		return theRequest;   
-	}
-	function submit(){
-		if(checkUserName() && checkPwd()) {
-			var uName = $(".Username").val();
-			var pwd = $(".Password").val();
-			var url = 'nUser/login.do';
-			$.ajax({
-				url : url,
-				data : {
-					uName : uName,
-					pwd : pwd
-				},
-				dataType : 'json',
-				success : function(result){
-					if(result.state == 1){
-						alert(result.message);
-					}else if(result.state == 0) {
-						window.location.href = 'index.html?uName=' + result.data.uName;
+		function getParameter(){
+	    	var url = location.search;    
+	   		var theRequest = new Object();   
+	   		if (url.indexOf("?") != -1) {   
+	      		var str = url.substr(1);   
+	      		strs = str.split("&");   
+	      		for(var i = 0; i < strs.length; i ++) {   
+	         		theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
+	      		}   
+	  		}   
+	   		return theRequest;   
+    	}
+		function submit(){
+			if(checkUserName() && checkPwd()) {
+				var uName = $(".Username").val();
+				var pwd = $(".Password").val();
+				var url = 'nUser/login.do';
+				$.ajax({
+					url : url,
+					data : {
+						uName : uName,
+						pwd : pwd
+					},
+					dataType : 'json',
+					success : function(result){
+						if(result.state == 1){
+							alert(result.message);
+						}else if(result.state == 0) {
+							window.location.href = 'index1.html';
+							document.cookie="uName" + result.data.uName;
+						}
 					}
-				}
-			})
+				})
+			}
 		}
-	}
-	function checkUserName() {
-		var userName = $(".Username").val();
-		if(userName.trim() == ''){
-			$("#userInfo").html('用户名不能为空!!!');
-			return false;
+		function checkUserName() {
+			var userName = $(".Username").val();
+			if(userName.trim() == ''){
+				$("#userInfo").html('用户名不能为空!!!');
+				return false;
+			}
+			return true;
 		}
-		return true;
-	}
-	function checkPwd() {
-		//var passwordReg = '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$';
-		var pwd = $(".Password").val();
-		if(pwd.trim()==''){
-			$("#pwdInfo").html('密码不能为空!!!');
-			return false;
+		function checkPwd() {
+			//var passwordReg = '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$';
+			var pwd = $(".Password").val();
+			if(pwd.trim()==''){
+				$("#pwdInfo").html('密码不能为空!!!');
+				return false;
+			}
+			return true;
 		}
-		return true;
-	}
-	function regist(){
-		window.location.href = 'regist.html';
-	}
 </script>
 
 </html>
