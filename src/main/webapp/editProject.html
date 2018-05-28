@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>
+		<title></title>
+	</head>
+	<body background="img/fifth_bg.jpg">
+		<div class="container-fluid">
+              <div class="col-md-9">
+                  <div class="viewProjects">
+                  	<span>项目名称</span><input name="name" type="text" class="form-control" id="pName" placeholder="项目名称">
+                  	<span>项目单位</span><input name="unit" type="text"  class="form-control" id="pName" placeholder="项目单位">
+                  	<span>联系人</span><input name="contact" type="text"  class="form-control" id="pName" placeholder="联系人">
+                  	<span>手机号</span><input name="phone" type="text"  class="form-control" id="pName" placeholder="手机号">
+                  	<span>专业类别</span><input name="majorType" type="text" class="form-control" id="pName" placeholder="专业类别">
+                  	<span>设计人员</span><input name="uID" type="text"  class="form-control" id="pName" placeholder="设计人员">
+                  	<span>审图人员</span><input name="checkID" type="text" class="form-control" id="pName" placeholder="审图人员">
+                  	<span>审核人员</span><input name="authorizedID" type="text"  class="form-control" id="pName" placeholder="审核人员">
+                  	<button onclick="submit();">提交修改</button>
+                  	<button onclick="cancel();">返回</button>
+                  </div>
+              </div>
+          </div>
+	</body>
+	<script>
+		var param = getParam();
+		var pid = param['pid'];
+		var uName = param['uName'];
+		$(document).ready(function(){
+			$.ajax({
+				type:"get",
+				url:"project/find.do",
+				async:true,
+				dataType:'json',
+				data:{
+					pid : pid
+				},
+				success:function(result){
+					if(result.state == 0){
+						var data = result.data;
+						data = eval('(' + data + ')');
+						$("input#pName").val(data.pName);
+						$("input#unit").val(data.unitName);
+						$("input#phone").val(data.cPhone);
+						$("input#pName").val(data.pName);
+						$("input#majorType").val(data.majorType);
+						$("input#uID").val(data.uid);
+						$("input#checkID").val(data.checkId);
+						$("input#authorizedId").val(data.authorizedId);
+					}else{
+						alert(result.message);
+					}
+				},error:function(){
+					alert('发生了未知错误，请稍候重新尝试');
+				}
+			});
+			function check(){
+				if($("input#pName").val().trim() == ''){
+					alert('项目名称不能为空');
+					return false;
+				}
+				if($("input#unit").val().trim == ''){
+					alert('项目单位不能为空');
+					return false;
+				}
+				if($("input#phone").val().trim == ''){
+					alert('手机好不能为空');
+					return false;
+				}
+				var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+				if(!$("input#phone").val().match(phoneReg)){
+					alert('请输入正确的手机号');
+					return false;
+				}
+				if($("input#majorType").val().trim == ''){
+					alert('工程类别不能为空');
+					return false;
+				}
+			}
+			function submit(){
+				if(!check()){
+					return;
+				}
+				$.ajax({
+					type:"post",
+					url:"project/update.do",
+					async:true,
+					data:{
+						pid : pid
+					},
+					dataType : 'json',
+					success : function(result){
+						if(result.state == 0){
+							window.location.href = 'index.html?uName=' + uName;
+						}else{
+							alert(result.message);
+						}
+					},
+					error : function(){
+						alert('发生了未知错误，请稍候重新尝试');
+					}
+				});
+			}
+		})
+		function getParam(){
+			var url = location.search;    
+	   		var theRequest = new Object();   
+	   		if (url.indexOf("?") != -1) {   
+	      		var str = url.substr(1);   
+	      		strs = str.split("&");   
+	      		for(var i = 0; i < strs.length; i ++) {   
+	         		theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
+	      		}   
+	  		}   
+	   		return theRequest;
+		}
+		function cancel(){
+			window.location.href="index.html";
+		}
+	</script>
+</html>
