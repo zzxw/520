@@ -84,4 +84,15 @@ public class WorkerServiceImpl implements WorkerService {
 		}
 	}
 
+	public Worker findById(Integer id) {
+		if(id == null) {
+			throw new NameException("id不能为空，请退出后重新尝试");
+		}
+		Worker worker = workerDao.findById(id);
+		if(worker == null) {
+			throw new NameException("用户不存在，请检查后重新输入");
+		}
+		return worker;
+	}
+
 }

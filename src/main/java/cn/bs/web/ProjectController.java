@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import cn.bs.entity.NUser;
 import cn.bs.entity.Project;
+import cn.bs.service.NUserService;
 import cn.bs.service.ProjectService;
+import cn.bs.service.WorkerService;
 import cn.bs.util.JsonResult;
 
 @Controller
@@ -24,6 +27,9 @@ public class ProjectController extends BaseController{
 	@Resource
 	private ProjectService projectService;
 	
+	@Resource
+	private NUserService ns;
+	
 	@RequestMapping("/add.do")
 	@ResponseBody
 	//返回值：{state:0,data:{id...}}
@@ -32,16 +38,27 @@ public class ProjectController extends BaseController{
 	public JsonResult<Project> add(Integer uid,Integer checkId,Integer authorizedId,String majorType,String pName,
 			Integer pType,String unitName,String contacts,String cPhone,Integer status){
 		Project project = new Project();
-		project.setAuthorizedId(authorizedId);
-		//project.setBlueprint(blueprint);
-		project.setCheckId(checkId);
+		if(authorizedId != null) {
+			project.setAuthorizedId(authorizedId);
+			NUser nUser = ns.findById(authorizedId);
+			project.setAuthorizedName(nUser.getuName());
+		}
+		if(checkId != null) {
+			project.setCheckId(checkId);
+			NUser nUser = ns.findById(checkId);
+			project.setCheckName(nUser.getuName());
+		}
 		project.setContacts(contacts);
 		project.setcPhone(cPhone);
 		project.setMajorType(majorType);
 		project.setpName(pName);
 		project.setpType(pType);
 		project.setStatus(status);
-		project.setUid(uid);
+		if(uid!=null) {
+			project.setUid(uid);
+			NUser nUser = ns.findById(uid);
+			project.setuName(nUser.getuName());
+		}
 		project.setUnitName(unitName);
 		projectService.add(project);
 		return new JsonResult<Project>(project);

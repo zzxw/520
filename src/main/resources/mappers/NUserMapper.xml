@@ -33,7 +33,15 @@
 	    </set> 
 		    where uid=#{uid}
 	</update>
-	
+	<select id="findById"
+		parameterType="int"
+		resultType="cn.bs.entity.NUser">
+		select *
+			from
+		users
+		where
+			uid = #{uid}
+	</select>
 	<select id="findByName"	
 		parameterType="string"
 		resultType="cn.bs.entity.NUser">

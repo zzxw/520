@@ -3,8 +3,11 @@ package cn.bs.entity;
 public class Project {
 	private Integer pid;
 	private Integer uid;
+	private String uName;
 	private Integer checkId;
+	private String checkName;
 	private Integer authorizedId;
+	private String authorizedName;
 	private String majorType;
 	private String pName;
 	private Integer pType;
@@ -18,15 +21,20 @@ public class Project {
 	public Project() {
 		super();
 	}
-
 	
-	public Project(Integer pid, Integer uid, Integer checkId, Integer authorizedId, String majorType, String pName, Integer pType,
-			String unitName, String contacts, String cPhone, Integer status, String blueprint,String advise) {
+	
+
+	public Project(Integer pid, Integer uid, String uName, Integer checkId, String checkName, Integer authorizedId,
+			String authorizedName, String majorType, String pName, Integer pType, String unitName, String contacts,
+			String cPhone, Integer status, String blueprint, String advise) {
 		super();
 		this.pid = pid;
 		this.uid = uid;
+		this.uName = uName;
 		this.checkId = checkId;
+		this.checkName = checkName;
 		this.authorizedId = authorizedId;
+		this.authorizedName = authorizedName;
 		this.majorType = majorType;
 		this.pName = pName;
 		this.pType = pType;
@@ -37,6 +45,7 @@ public class Project {
 		this.blueprint = blueprint;
 		this.advise = advise;
 	}
+
 
 
 	public Integer getPid() {
@@ -151,6 +160,31 @@ public class Project {
 		this.advise = advise;
 	}
 
+	public String getuName() {
+		return uName;
+	}
+
+	public void setuName(String uName) {
+		this.uName = uName;
+	}
+
+
+
+	public String getCheckName() {
+		return checkName;
+	}
+
+	public void setCheckName(String checkName) {
+		this.checkName = checkName;
+	}
+
+	public String getAuthorizedName() {
+		return authorizedName;
+	}
+
+	public void setAuthorizedName(String authorizedName) {
+		this.authorizedName = authorizedName;
+	}
 
 	@Override
 	public String toString() {

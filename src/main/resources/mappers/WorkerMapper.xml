@@ -28,7 +28,12 @@
 	    </set>
 	    where id=#{id}
 	</update>
-	
+	<select id="findById"
+		parameterType="int"
+		resultType="cn.bs.entity.Worker">
+		select * from worker
+			where uid = #{uid} 	
+	</select>
 	<select id="findUser"	
 		resultType="cn.bs.entity.Worker">
 		select * from  worker

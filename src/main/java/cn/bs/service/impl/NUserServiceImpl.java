@@ -126,4 +126,15 @@ public class NUserServiceImpl implements NUserService {
 		}
 		return nUserDao.changePwd(userName,newPwd)==1;
 	}
+
+	public NUser findById(Integer id) {
+		if(id == null) {
+			throw new NameException("id不能为空，请退出后重新尝试");
+		}
+		NUser nUser = nUserDao.findById(id);
+		if(nUser == null) {
+			throw new NameException("该用户不存在！！！");
+		}
+		return nUser;
+	}
 }

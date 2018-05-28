@@ -37,8 +37,10 @@ public class FileController {
 	@ResponseBody
 	public String upload(MultipartFile file,HttpServletRequest request){  
         String path = "d:" + File.separator +"fzTemp";
+        String pId = request.getParameter("pId");
+        String userName = request.getParameter("uName");
+        path = path + File.separator + pId;
 		String fileName = file.getOriginalFilename();
-		String userName = "";
 		NUser user = nService.findByName(userName);
 		Integer userID = user.getUid();
 		String filePath = path + fileName;

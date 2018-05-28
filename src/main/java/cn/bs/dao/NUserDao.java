@@ -8,6 +8,7 @@ import cn.bs.entity.NUser;
 public interface NUserDao {
 	int regist(NUser nUser);
 	NUser findByName(String name);//findByName和login方法使用
+	NUser findById(Integer id);
 	int updateInfo(NUser user);
 	List<NUser> findUsersByMajor(String major);
 	List<NUser> findUsersByType(int userType);
