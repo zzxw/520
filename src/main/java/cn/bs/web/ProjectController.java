@@ -126,7 +126,7 @@ public class ProjectController extends BaseController{
 	
 	@RequestMapping("/statistics.do")
 	@ResponseBody
-	public JsonResult<String> statistics(String iden,Integer id){
+	public JsonResult<String> statistics(String iden,Integer id){		
 		String result = projectService.statistics(iden,id);
 		return new JsonResult<String>(result);
 	}

@@ -29,6 +29,11 @@ public class ProjectServiceImpl implements ProjectService {
 		if(!project.getcPhone().matches(phoneReg)){
 			throw new NameException("手机号格式不正确，请检查后重新输入");
 		}
+		if(project.getUid() == null) {
+			project.setStatus(0);
+		}else {
+			project.setStatus(1);
+		}
 		boolean isSuccess = projectDao.add(project);
 		if(!isSuccess) {
 			throw new NameException("创建项目失败，请稍后重新尝试");

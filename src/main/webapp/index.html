@@ -120,7 +120,7 @@
                     <div class="col-md-6">
                     </div>
                     <div class="col-md-6">
-                        <form id="contact" action="" method="post">
+                        <form id="contact">
                             <div class="row">
                                 <div class="col-md-12">
                                   <fieldset>
@@ -149,17 +149,17 @@
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="uId" type="text" rows="6" class="form-control" id="uId" placeholder="设计人员" required=""></input>
+                                    <input name="uId" type="text" rows="6" class="form-control" id="uId" placeholder="设计人员"></input>
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="checkId" type="text" rows="6" class="form-control" id="checkId" placeholder="审图人员" required=""></input>
+                                    <input name="checkId" type="text" rows="6" class="form-control" id="checkId" placeholder="审图人员"></input>
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="authorizedId" type="text" rows="6" class="form-control" id="authorizedId" placeholder="审核人员" required=""></input>
+                                    <input name="authorizedId" type="text" rows="6" class="form-control" id="authorizedId" placeholder="审核人员"></input>
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
@@ -253,7 +253,7 @@
 	    	$("#uName").val(uName);
 	    }
     	var a2Class = $("#a2").attr('class');
-    	if(typeof(a2Class)!='undefined' && a2Class == 'attr'){
+    	if(a2Class == 'active'){
     		var myChart = echarts.init($("#graph").get(0));
          	var option = {
 				title : {
@@ -286,28 +286,31 @@
         data = eval('(' + data + ')');
         option.series.data = data;
         myChart.setOption(option);*/
-       /* $.ajax({
-        	type:"get",
-        	url:"project/statistics",
-        	async:true,
-        	dataType : 'json',
-        	success:function(result){
-        		var data;
-        		if(result.state == 0){
-        			data = result.data;
-        			data = eval('(' +data + ')');
-        			option.legend.data = data;
-        			option.series.data = data;        			
-        			myChart.setOption(option);
-        		}else{
-        			alert(result.message);
-        		}
-        		
-        	}
-        });*/
+	        $.ajax({
+	        	type:"get",
+	        	url:"project/statistics",
+	        	async:true,
+	        	dataType : 'json',
+	        	data :{
+	        		iden : 'admin'
+	        	},
+	        	success:function(result){
+	        		var data;
+	        		if(result.state == 0){
+	        			data = result.data;
+	        			//data = eval('(' +data + ')');
+	        			option.legend.data = data;
+	        			option.series.data = data;        			
+	        			myChart.setOption(option);
+	        		}else{
+	        			alert(result.message);
+	        		}
+	        		
+	        	}
+	        });
     	}
     	var a3Class = $("#a3").attr('class');
-    	if(typeof(a3Class)!='undefined' && a3Class == 'attr'){
+    	if(a3Class == 'active'){
     		var uName = document.cookie.split("=")[1];
     		$.ajax({
     			type:"get",
@@ -336,18 +339,6 @@
 	    	$("#a1").removeClass('active');
 	    	$("#a" + id).addClass('active');
 	    }
-/*	    function getParameter(){
-		    	var url = location.search;    
-		   		var theRequest = new Object();   
-		   		if (url.indexOf("?") != -1) {   
-		      		var str = url.substr(1);   
-		      		strs = str.split("&");   
-		      		for(var i = 0; i < strs.length; i ++) {   
-		         		theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
-		      		}   
-		  		}   
-		   		return theRequest;   
-    	}*/
 	    function scrollToID(id, speed){
 	        var offSet = 0;
 	        var targetOffset = $(id).offset().top - offSet;
@@ -393,7 +384,7 @@
 	    	var uId = $("#uId");
 	    	var checkId = $("#checkId");
 	    	var authorizedId = $("#authorizedId");
-	    	if(isEmpty(pName.val()) || isEmpty(unitName.val()) || isEmpty(contacts.val()) || isEmpty(cPhone.val()) || isEmpty(pType).val()) {
+	    	if(isEmpty(pName.val()) || isEmpty(unitName.val()) || isEmpty(contacts.val()) || isEmpty(cPhone.val()) || isEmpty(pType.val())) {
 	    		alert("所有字段均需填写");
 	    		return;
 	    	}
@@ -411,7 +402,7 @@
 	    			unitName : unitName.val(),
 	    			contacts : contacts.val(),
 	    			cPhone : cPhone.val(),
-	    			pType : cType.val(),
+	    			pType : pType.val(),
 	    			uId : uId.val(),
 	    			checkId : checkId.val(),
 	    			authorizedId : authorizedId.val()

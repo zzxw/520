@@ -86,7 +86,7 @@
 							alert(result.message);
 						}else if(result.state == 0) {
 							window.location.href = 'index.html';
-							document.cookie="uName" + result.data.uName;
+							document.cookie="uName=" + result.data.uName;
 						}
 					}
 				})
