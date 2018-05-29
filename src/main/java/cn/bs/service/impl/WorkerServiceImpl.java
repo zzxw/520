@@ -56,7 +56,8 @@ public class WorkerServiceImpl implements WorkerService {
 
 	public boolean updateInfo(Worker worker) {
 		checkInfo(worker);
-		if(workerDao.update(worker)!=1){
+		int n = workerDao.update(worker);
+		if(n!=1){
 			throw new NameException("抱歉，发生了未知错误，请稍候再试");
 		}
 		return true;

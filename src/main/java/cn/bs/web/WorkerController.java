@@ -40,8 +40,9 @@ public class WorkerController extends BaseController{
 	@RequestMapping("/update.do")
 	@ResponseBody
 	public JsonResult<Worker> changePW
-	(String uName,String pwd,String phone,String mail){
+	(Integer id,String uName,String pwd,String phone,String mail){
 		Worker worker = new Worker();
+		worker.setUid(id);
 		worker.setMail(mail);
 		worker.setPhone(phone);
 		worker.setPwd(pwd);

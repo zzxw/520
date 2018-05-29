@@ -22,15 +22,16 @@
                   	<span>设计人员</span><input name="uID" type="text" disabled="disabled"  class="form-control" id="pName" placeholder="设计人员">
                   	<span>审图人员</span><input name="checkID" type="text" disabled="disabled"  class="form-control" id="pName" placeholder="审图人员">
                   	<span>审核人员</span><input name="authorizedID" type="text" disabled="disabled"  class="form-control" id="pName" placeholder="审核人员">
-                  	<span>审图意见</span><input name="advise" type="text" disabled="disabled" class="form-control" id="advise"/>
-                  	<button onclick="cancel();">返回</button>
+                  	<span>审图意见</span><input name="advise" type="text" disabled="disabled" class="form-control" id="advise" placeholder="审图意见"/>
+                  	<button onclick="cancel();" style="width: 100px; height: 30px; position: static;">返回</button>
                   </div>
               </div>
           </div>
 	</body>
+	<script type="text/javascript" src="js/getParameter.js" ></script>
 	<script>
 		$(document).ready(function(){
-			var param = getParam();
+			var param = getParameter();
 			var pid = param['pid'];
 			$.ajax({
 				type:"get",
@@ -56,22 +57,10 @@
 						alert(result.message);
 					}
 				},error:function(){
-					alert('发生了未知错误，请稍候重新尝试');
+					//alert('发生了未知错误，请稍候重新尝试');
 				}
 			});
 		})
-		function getParam(){
-			var url = location.search;    
-	   		var theRequest = new Object();   
-	   		if (url.indexOf("?") != -1) {   
-	      		var str = url.substr(1);   
-	      		strs = str.split("&");   
-	      		for(var i = 0; i < strs.length; i ++) {   
-	         		theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
-	      		}   
-	  		}   
-	   		return theRequest;
-		}
 		function cancel(){
 			window.location.href="index.html";
 		}

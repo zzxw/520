@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body background="img/fifth_bg.jpg">
+		<span>请输入旧密码</span><input name="oPwd" type="password" class="form-control" id="oPwd" placeholder="旧密码"><br />
+		<span>新密码</span><input name="nPwd" type="password" class="form-control" id="nPwd" placeholder="新密码"><br />
+		<span>重复输入密码</span><input name="rPwd" type="password" class="form-control" id="rPwd" placeholder="重复输入新密码"><br />
+		<button onclick="submit();">提交</button>
+	</body>
+	<script type="text/javascript" src="js/getParameter.js" ></script>
+	<script>
+		var cookie = document.cookie;
+		var request = getParameter();
+	    var uName = '';
+	    if(isEmpty(cookie) && isEmpty(request) && isEmpty(request.name)) {
+	    	window.location.href = 'login.html';
+	    }
+	    if(isEmpty(cookie)){
+	    	uName = request.name;
+	    	document.cookie="uName" + uName;
+	    }else if(cookie.split("=")[1] != uName){
+	    	alert('发生了未知的错误，请重新登录');
+	    	window.location.href = 'login.html';
+	    }
+		function submit(){
+			var pwdReg = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
+			var oPwd = $("input#oPwd").val();
+			var nPwd = $("input#nPwd").val();
+			var repeatPwd = $("input#rPwd").val();
+			if(oPwd.trim()=='' || nPwd.trim() == ''||repeatPwd.trim() == ''){
+				alert("所有信息都是必填项，请正确填写后再提交");
+				return;
+			}
+			$.ajax({
+				type:"get",
+				url:"worker/find.do",
+				async:true,
+				dataType:'json',
+				data: {
+					name : uName
+				},
+				success:function(result){
+					if(result.state == 0 ){
+						var data = result.data;
+						if(nPwd!=repeatPwd || !nPwd.match(pwdReg)){
+							alert("两次输入的密码必须相同，并且密码要在8-16字符之间，且必须为数字和字母的组合");
+							return;
+						}
+						if(oPwd != data.pwd){
+							alert("输入的原密码错误，请检查后重新尝试");
+							return;
+						}
+						var uid = data.id;
+						$.ajax({
+							type:"post",
+							url:"worker/update.do",
+							async:true,
+							dataType:'json',
+							data:{
+								uid:uid,
+								pwd:nPwd
+							},
+							success:function(result){
+								if(data.state == 0){
+									var data = result.data;
+									data = eval('(' + data + ')');
+									document.cookie="uName" + uName;
+									window.location.href = 'index.html?uName=' + uName;
+								}else{
+									alert(result.message);
+								}
+							},
+							error : function(){
+								
+							}
+						});
+					}else{
+						alert(result.message);
+					}
+				},
+				error:function(){
+					
+				}
+			});
+		}
+		function isEmpty(obj){
+			if(obj==null || typeof(obj)=='undefined' || obj.trim() == ''){
+				return true;
+			}
+			return false;
+		}
+	</script>
+</html>

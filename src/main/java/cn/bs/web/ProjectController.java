@@ -17,7 +17,6 @@ import cn.bs.entity.NUser;
 import cn.bs.entity.Project;
 import cn.bs.service.NUserService;
 import cn.bs.service.ProjectService;
-import cn.bs.service.WorkerService;
 import cn.bs.util.JsonResult;
 
 @Controller

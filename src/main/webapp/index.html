@@ -107,6 +107,8 @@
                                     <input name="mail" type="text" rows="6" class="form-control" id="mail" placeholder="用户邮箱" required=""></input>
                                   </fieldset>
                                 </div>
+                                <button onclick="modifyUserInfo();">修改用户信息</button>
+                                <button onclick="modifyPwd();">修改密码</button>
                             </div>
                         </form>
                     </div>
@@ -223,29 +225,33 @@
 	<script type="text/javascript" src="js/main.js" ></script>
     <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script> -->
     <script type="text/javascript" src="js/echarts.js" ></script>
+    <script type="text/javascript" src="js/getParameter.js" ></script>
     <script type="text/javascript">
     	$(document).ready(function() {
-        $('.scroll-link').on('click', function(event){
-            event.preventDefault();
-            var sectionID = $(this).attr("data-id");
-            scrollToID('#' + sectionID, 750);
-        });
-        $('.scroll-top').on('click', function(event) {
-            event.preventDefault();
-            $('html, body').animate({scrollTop:0}, 'slow');         
-        });
-        $('#nav-toggle').on('click', function (event) {
-            event.preventDefault();
-            $('#main-nav').toggleClass("open");
-        });
-    });
-    var cookie = document.cookie;
-    if(cookie == null || typeof(cookie) == 'undefined') {
-    	window.location.href = 'userLogin.html';
-    }else{
-    	var uName = cookie.split("=")[1];
-    	$("#uName").val(uName);
-    }
+	        $('.scroll-link').on('click', function(event){
+	            event.preventDefault();
+	            var sectionID = $(this).attr("data-id");
+	            scrollToID('#' + sectionID, 750);
+	        });
+	        $('.scroll-top').on('click', function(event) {
+	            event.preventDefault();
+	            $('html, body').animate({scrollTop:0}, 'slow');         
+	        });
+	        $('#nav-toggle').on('click', function (event) {
+	            event.preventDefault();
+	            $('#main-nav').toggleClass("open");
+	        });
+	    });
+	    var cookie = document.cookie;
+	    var uName = '';
+	    var phone = '';
+	    var mail = '';
+	    if(cookie == null || typeof(cookie) == 'undefined') {
+	    	window.location.href = 'userLogin.html';
+	    }else{
+	    	uName = cookie.split("=")[1];
+	    	$("#uName").val(uName);
+	    }
     	var a2Class = $("#a2").attr('class');
     	if(typeof(a2Class)!='undefined' && a2Class == 'attr'){
     		var myChart = echarts.init($("#graph").get(0));
@@ -317,115 +323,167 @@
     				$("input#uName").val(data.uName);
     				$("input#phone").val(data.phone);
     				$("input#mail").val(data.mail);
+    				uName = data.uName;
+    				phone = data.phone;
+    				mail = data.mail;
     			}
     		});
     	}
-        var href = location.href;
-        if(href.indexOf("#")!=-1){
-        	var id = href.substr(href.indexOf('#')+1);
-        	location.href = href.substring(href.indexOf('#'));
-        	$("#a1").removeClass('active');
-        	$("#a" + id).addClass('active');
-        }
-        function getParameter(){
-	    	var url = location.search;    
-	   		var theRequest = new Object();   
-	   		if (url.indexOf("?") != -1) {   
-	      		var str = url.substr(1);   
-	      		strs = str.split("&");   
-	      		for(var i = 0; i < strs.length; i ++) {   
-	         		theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
-	      		}   
-	  		}   
-	   		return theRequest;   
-    	}
-    function scrollToID(id, speed){
-        var offSet = 0;
-        var targetOffset = $(id).offset().top - offSet;
-        var mainNav = $('#main-nav');
-        $('html,body').animate({scrollTop:targetOffset}, speed);
-        if (mainNav.hasClass("open")) {
-            mainNav.css("height", "1px").removeClass("in").addClass("collapse");
-            mainNav.removeClass("open");
-        }
-    }
-    if (typeof console === "undefined") {
-        console = {
-            log: function() { }
-        };
-    }
-    function phoneCheck(){
-    	var cPhone = $("#cPhone").val();
-    	if(cPhone == null || typeof(cPhone)=='undefined' || cPhone.trim() == '') {
-    		alert("手机号不能为空!!!!");
-    	}
-    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
-    	if(!cPhone.match(phoneReg)){
-    		alert("手机号格式不正确，请填写正确的手机号");
-    	}
-    }
-    function isEmpty(data){
-    	if(data == null || typeof(data) == 'undefined' || data.trim()==''){
-    		return true;
-    	}
-    	return false;
-    }
-    $("#form-submit").click(function(){
-    	var pName = $("#pName");
-    	var unitName = $("#unitName");
-    	var contacts = $("#contacts");
-    	var cPhone = $("#cPhone");
-    	var pType = $("#pType");
-    	var uId = $("#uId");
-    	var checkId = $("#checkId");
-    	var authorizedId = $("#authorizedId");
-    	if(isEmpty(pName.val()) || isEmpty(unitName.val()) || isEmpty(contacts.val()) || isEmpty(cPhone.val()) || isEmpty(pType).val()) {
-    		alert("所有字段均需填写");
-    		return;
-    	}
-    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
-    	if(!cPhone.val().match(phoneReg)){
-    		alert("手机号格式不正确，请填写正确的手机号");
-    	}
-    	$.ajax({
-    		type:"get",
-    		url:"Project/add.do",
-    		async:true,
-    		dataType : 'json',
-    		data : {
-    			pName : pName.val(),
-    			unitName : unitName.val(),
-    			contacts : contacts.val(),
-    			cPhone : cPhone.val(),
-    			pType : cType.val(),
-    			uId : uId.val(),
-    			checkId : checkId.val(),
-    			authorizedId : authorizedId.val()
-    		},
-        	success:function(result){
-        		if(result.state == 0){
-        			pName.val('');
-        			unitName.val('');
-        			contacts.val('');
-        			cPhone.val('');
-        			pType.val('');
-        			uId.val('');
-        			checkId.val('');
-        			authorizedId.val('');
-        			window.location.href="index.html";
-        		}else{
-        			alert(result.message);
-        		}
-        	},
-        	error:function(){
-        		alert("发生了未知的错误，请重新尝试");
-        	}
-    	});
-    });
-    function modify(){
-    	
-    }
-    function view(status,pageNo){
+	    var href = location.href;
+	    if(href.indexOf("#")!=-1){
+	    	var id = href.substr(href.indexOf('#')+1);
+	    	location.href = href.substring(href.indexOf('#'));
+	    	$("#a1").removeClass('active');
+	    	$("#a" + id).addClass('active');
+	    }
+/*	    function getParameter(){
+		    	var url = location.search;    
+		   		var theRequest = new Object();   
+		   		if (url.indexOf("?") != -1) {   
+		      		var str = url.substr(1);   
+		      		strs = str.split("&");   
+		      		for(var i = 0; i < strs.length; i ++) {   
+		         		theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
+		      		}   
+		  		}   
+		   		return theRequest;   
+    	}*/
+	    function scrollToID(id, speed){
+	        var offSet = 0;
+	        var targetOffset = $(id).offset().top - offSet;
+	        var mainNav = $('#main-nav');
+	        $('html,body').animate({scrollTop:targetOffset}, speed);
+	        if (mainNav.hasClass("open")) {
+	            mainNav.css("height", "1px").removeClass("in").addClass("collapse");
+	            mainNav.removeClass("open");
+	        }
+	    }
+	    if (typeof console === "undefined") {
+	        console = {
+	            log: function() { }
+	        };
+	    }
+	    function phoneCheck(){
+	    	var cPhone = $("#phone").val();
+	    	if(cPhone == null || typeof(cPhone)=='undefined' || cPhone.trim() == '') {
+	    		return false;
+	    		alert("手机号不能为空!!!!");
+	    	}
+	    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+	    	if(!cPhone.match(phoneReg)){
+	    		return false;
+	    		alert("手机号格式不正确，请填写正确的手机号");
+	    	}
+	    	if(cPhone == phone){
+	    		return false;
+	    	}
+	    }
+	    function isEmpty(data){
+	    	if(data == null || typeof(data) == 'undefined' || data.trim()==''){
+	    		return true;
+	    	}
+	    	return false;
+	    }
+	    $("#form-submit").click(function(){
+	    	var pName = $("#pName");
+	    	var unitName = $("#unitName");
+	    	var contacts = $("#contacts");
+	    	var cPhone = $("#cPhone");
+	    	var pType = $("#pType");
+	    	var uId = $("#uId");
+	    	var checkId = $("#checkId");
+	    	var authorizedId = $("#authorizedId");
+	    	if(isEmpty(pName.val()) || isEmpty(unitName.val()) || isEmpty(contacts.val()) || isEmpty(cPhone.val()) || isEmpty(pType).val()) {
+	    		alert("所有字段均需填写");
+	    		return;
+	    	}
+	    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+	    	if(!cPhone.val().match(phoneReg)){
+	    		alert("手机号格式不正确，请填写正确的手机号");
+	    	}
+	    	$.ajax({
+	    		type:"get",
+	    		url:"Project/add.do",
+	    		async:true,
+	    		dataType : 'json',
+	    		data : {
+	    			pName : pName.val(),
+	    			unitName : unitName.val(),
+	    			contacts : contacts.val(),
+	    			cPhone : cPhone.val(),
+	    			pType : cType.val(),
+	    			uId : uId.val(),
+	    			checkId : checkId.val(),
+	    			authorizedId : authorizedId.val()
+	    		},
+	        	success:function(result){
+	        		if(result.state == 0){
+	        			pName.val('');
+	        			unitName.val('');
+	        			contacts.val('');
+	        			cPhone.val('');
+	        			pType.val('');
+	        			uId.val('');
+	        			checkId.val('');
+	        			authorizedId.val('');
+	        			window.location.href="index.html";
+	        		}else{
+	        			alert(result.message);
+	        		}
+	        	},
+	        	error:function(){
+	        		alert("发生了未知的错误，请重新尝试");
+	        	}
+	    	});
+	    });
+	    function modify(){
+	    	
+	    }
+	    function modifyUserInfo(){
+	    	if(!phoneCheck()){
+	    		return;
+	    	}
+			var emailReg = "^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
+			var email = $("#mail").val();
+			if(email.trim() == '' || !email.match(emailReg)){
+				alert("请输入正确的邮箱格式");
+				return;
+			}
+			if(email == mail && phone == $("#phone").val()){
+				return;
+				alert('未改变任何内容');
+			}
+			var data = {};
+			if(email != mail){
+				data.mail = email;
+			}
+			if(phone != $("#phone").val()){
+				data.phone = $("#phone").val();
+			}
+			if(data.length>0){
+				$.ajax({
+					type:"post",
+					url:"worker/update.do",
+					async:true,
+					dataType:'json',
+					data: data,
+					success:function(result){
+						var data = result.data;
+						data = eval('(' + data + ')');
+						$("#phone").val(data.phone);
+						$("#mail").val(data.mail);
+						alert("修改信息成功");
+					},
+					error:function(){
+						
+					}
+				});
+			}
+	    }
+	    function modifyPwd(){
+	    	window.location.href = "modifyPwd.html?name=" + uName;
+	    }
+	    function view(status,pageNo){
     	var tbody = $(".projectBody");
     	if(typeof(pageNo)=='undefined' || !Number.isNaN(pageNo)){
     		pageNo = 1;
