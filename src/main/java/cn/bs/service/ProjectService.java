@@ -13,4 +13,6 @@ public interface ProjectService {
 	List<Project> findProjects();
 	List<Project> findProjectsByStatus(int status);
 	String statistics(String iden,int id);
+	String statisticsForAdmin();
+	String statisticsForUser(Integer id);
 }

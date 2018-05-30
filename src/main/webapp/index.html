@@ -47,8 +47,8 @@
           </div>
           <ul>
             <li><a href="#1" id="a1"><i class="fa fa-home"></i> <em>Home</em></a></li>
-            <li><a href="#2" id="a2"><i class="fa fa-image"></i> <em>Profile</em></a></li>
-            <li><a href="#3" id="a3"><i class="fa fa-user"></i> <em>user Manager</em></a></li>
+            <li><a href="#2" id="a2" onclick="viewProfile();"><i class="fa fa-image"></i> <em>Profile</em></a></li>
+            <li><a href="#3" id="a3" onclick="managerUser();"><i class="fa fa-user"></i> <em>user Manager</em></a></li>
           </ul>
         </nav>
         
@@ -85,7 +85,6 @@
           <div class="slide" id="3">
           	<div class="content fourth-content">
           		<div class="col-md-6">
-                        <form id="contact" action="" method="post">
                             <div class="row">
                                 <div class="col-md-12">
                                   <fieldset>
@@ -99,18 +98,17 @@
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="phone" type="tel" rows="6" class="form-control" id="phone" placeholder="手机号" required=""></input>
+                                    <input name="phone" type="tel" rows="6" class="form-control" id="phone" placeholder="手机号" required="" disabled="disabled"></input>
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="mail" type="text" rows="6" class="form-control" id="mail" placeholder="用户邮箱" required=""></input>
+                                    <input name="mail" type="text" rows="6" class="form-control" id="mail" placeholder="用户邮箱" required="" disabled="disabled"></input>
                                   </fieldset>
                                 </div>
                                 <button onclick="modifyUserInfo();">修改用户信息</button>
                                 <button onclick="modifyPwd();">修改密码</button>
                             </div>
-                        </form>
                     </div>
           	</div>
           </div>
@@ -252,8 +250,8 @@
 	    	uName = cookie.split("=")[1];
 	    	$("#uName").val(uName);
 	    }
-    	var a2Class = $("#a2").attr('class');
-    	if(a2Class == 'active'){
+    	//var a2Class = $("#a2").attr('class');
+    	function viewProfile(){
     		var myChart = echarts.init($("#graph").get(0));
          	var option = {
 				title : {
@@ -282,39 +280,31 @@
 					data : []
 				}
 			};
-       /* var data = "[{\"name\":\"待设计\",\"value\":\"3\"},{\"name\":\"待审核\",\"value\":\"1\"}]";
-        data = eval('(' + data + ')');
-        option.series.data = data;
-        myChart.setOption(option);*/
 	        $.ajax({
 	        	type:"get",
-	        	url:"project/statistics",
+	        	url:"Project/adminStatistics.do",
 	        	async:true,
 	        	dataType : 'json',
-	        	data :{
-	        		iden : 'admin'
-	        	},
 	        	success:function(result){
 	        		var data;
 	        		if(result.state == 0){
 	        			data = result.data;
-	        			//data = eval('(' +data + ')');
+	        			data = eval('(' +data + ')');
 	        			option.legend.data = data;
 	        			option.series.data = data;        			
 	        			myChart.setOption(option);
 	        		}else{
 	        			alert(result.message);
 	        		}
-	        		
 	        	}
 	        });
     	}
-    	var a3Class = $("#a3").attr('class');
-    	if(a3Class == 'active'){
+    	//var a3Class = $("#a3").attr('class');
+    	function managerUser(){
     		var uName = document.cookie.split("=")[1];
     		$.ajax({
     			type:"get",
-    			url:"/worker/find.do",
+    			url:"worker/find.do",
     			async:true,
     			dataType : 'json',
     			data : {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.bs.entity.Project;
+import cn.bs.entity.Result;
 
 public interface ProjectDao {
 	boolean add(Project project);
@@ -15,4 +16,6 @@ public interface ProjectDao {
 	List<Project> findProjectsByStatus(int status);
 	List<HashMap<String, String>>statistics();
 	List<HashMap<String, String>>getTotal(int id);
+	List<Result> findProjectsForAdmin();
+	List<Result> findProjectsForUser(Integer id);
 }

@@ -131,6 +131,20 @@ public class ProjectController extends BaseController{
 		return new JsonResult<String>(result);
 	}
 	
+	@RequestMapping("/adminStatistics.do")
+	@ResponseBody
+	public JsonResult<String> statisticsForAdmin(){		
+		String result = projectService.statisticsForAdmin();
+		return new JsonResult<String>(result);
+	}
+	
+	@RequestMapping("/userStatistics.do")
+	@ResponseBody
+	public JsonResult<String> statisticsForUsers(Integer id){		
+		String result = projectService.statisticsForUser(id);
+		return new JsonResult<String>(result);
+	}
+	
 	@RequestMapping("/upload.do")
 	@ResponseBody
 	public JsonResult<Boolean> uploadImg(HttpRequest request){

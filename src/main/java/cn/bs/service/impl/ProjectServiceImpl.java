@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.poi.ss.formula.functions.Count;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +15,17 @@ import com.google.gson.Gson;
 
 import cn.bs.dao.ProjectDao;
 import cn.bs.entity.Project;
+import cn.bs.entity.Result;
 import cn.bs.service.NameException;
 import cn.bs.service.ProjectService;
 import cn.bs.tools.Tools;
 
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService {
+	
+	final static HashMap<Integer, String> MAPPER = new HashMap<Integer, String>();
+	
+	
 	@Resource
 	private ProjectDao projectDao;
 	public Project add(Project project) {
@@ -40,7 +47,14 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		return project;
 	}
-
+	
+	public void onInit() {
+		MAPPER.put(0, "待设计");
+		MAPPER.put(1, "待审核");
+		MAPPER.put(2, "待审查");
+		MAPPER.put(3, "已完成");
+	}
+	
 	public boolean update(Project project) {
 		Project oldProject = projectDao.search(project.getPid());
 		if(oldProject.getStatus() == 0 && project.getUid()==null){
@@ -100,16 +114,12 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	public String statistics(String iden,int id) {
+		onInit();
 		if(Tools.isEmpty(iden)){
 			throw new NameException("用户身份为空，请重新登录后再尝试！");
 		}
 		List<HashMap<String, String>> list = new ArrayList<HashMap<String,String>>();
 		List<HashMap<String, String>> result = new ArrayList<HashMap<String,String>>();
-		HashMap<String, String> mapper = new HashMap<String, String>();
-		mapper.put("0", "待设计");
-		mapper.put("1", "待审核");
-		mapper.put("2", "待审查");
-		mapper.put("3", "已完成");
 		if("admin".equals(iden)){
 			list = projectDao.statistics();
 		}else{
@@ -118,11 +128,47 @@ public class ProjectServiceImpl implements ProjectService {
 		for (HashMap<String, String> hashMap : list) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("value",String.valueOf(hashMap.get("count(*)")));
-			map.put("name",mapper.get(String.valueOf(hashMap.get("status"))));
+			map.put("name",MAPPER.get(String.valueOf(hashMap.get("status"))));
 			result.add(map);
 		}
 		Gson gson = new Gson();
 		return gson.toJson(result);
+	}
+
+	public String statisticsForAdmin() {
+		onInit();
+		List<Result> list = projectDao.findProjectsForAdmin();
+		List<HashMap<String,String>> data = new ArrayList<HashMap<String,String>>();
+		for (Result result : list) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			Integer status = result.getStatus();
+			status = status==null?0:status;
+			Integer count = result.getCount();
+			count = count==null?0:count;
+			map.put("name", MAPPER.get(status));
+			map.put("value", String.valueOf(count));
+			data.add(map);
+		}
+		Gson gson = new Gson();
+		return gson.toJson(data);
+	}
+
+	public String statisticsForUser(Integer id) {
+		onInit();
+		List<Result> list = projectDao.findProjectsForUser(id);
+		List<HashMap<String,String>> data = new ArrayList<HashMap<String,String>>();
+		for (Result result : list) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			Integer status = result.getCount();
+			status = status==null?0:status;
+			Integer count = result.getCount();
+			count = count==null?0:count;
+			map.put("name", MAPPER.get(status));
+			map.put("value", String.valueOf(count));
+			data.add(map);
+		}
+		Gson gson = new Gson();
+		return gson.toJson(data);
 	}
 	
 }

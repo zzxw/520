@@ -58,8 +58,19 @@ values
 	
 	
 	<select id="statistics"
-		resultType="hashmap">
-		select count(*),status from projects group by status
+		resultType="cn.bs.entity.Result">
+		select count(*) as count,status from projects group by status
+	</select>
+	
+	<select id="findProjectsForAdmin"
+		resultType="cn.bs.entity.Result">
+		select count(*) as count,status from projects
+	</select>
+	
+	<select id="findProjectsForUser"
+		parameterType="int"
+		resultType="cn.bs.entity.Result">
+		select count(*) as count,status from projects where (uid=#{id} or checkid=#{id} or authorizedId=#{id}) group by status
 	</select>
 	
 	<select id="getTotal"
