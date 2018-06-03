@@ -38,7 +38,7 @@
           <div class="logo">
               <img src="img/logo.png" alt="">
               <div class="userInfo" style="background-color: #4CAE4C;">
-              	<p class="userInfo"></p>
+              	<p class="userInfo" style="font-size: 14px;"></p>
               	<button onclick="out();">退出</button>
               </div>
           </div>
@@ -251,7 +251,7 @@
 	    //var cookie = document.cookie;
 	    var uName = $.cookie("name");
 	    var uId = $.cookie('id');
-	    $("p.userInfo").val("欢迎您，" + uName);
+	    $("p.userInfo").html("欢迎您，" + uName);
 	    var phone = '';
 	    var mail = '';
 	    if(typeof(uName) == 'undefined' || uName.trim() == '') {
