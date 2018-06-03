@@ -30,17 +30,17 @@
 <body>
     
     <div class="sequence">
-  
       <div class="seq-preloader">
         <svg width="39" height="16" viewBox="0 0 39 16" xmlns="http://www.w3.org/2000/svg" class="seq-preload-indicator"><g fill="#F96D38"><path class="seq-preload-circle seq-preload-circle-1" d="M3.999 12.012c2.209 0 3.999-1.791 3.999-3.999s-1.79-3.999-3.999-3.999-3.999 1.791-3.999 3.999 1.79 3.999 3.999 3.999z"/><path class="seq-preload-circle seq-preload-circle-2" d="M15.996 13.468c3.018 0 5.465-2.447 5.465-5.466 0-3.018-2.447-5.465-5.465-5.465-3.019 0-5.466 2.447-5.466 5.465 0 3.019 2.447 5.466 5.466 5.466z"/><path class="seq-preload-circle seq-preload-circle-3" d="M31.322 15.334c4.049 0 7.332-3.282 7.332-7.332 0-4.049-3.282-7.332-7.332-7.332s-7.332 3.283-7.332 7.332c0 4.05 3.283 7.332 7.332 7.332z"/></g></svg>
       </div>
-      
     </div>
-    
-  
         <nav>
           <div class="logo">
               <img src="img/logo.png" alt="">
+              <div class="userInfo" style="background-color: #4CAE4C;">
+              	<p class="userInfo"></p>
+              	<button onclick="out();">退出</button>
+              </div>
           </div>
           <div class="mini-logo">
               <img src="img/mini_logo.png" alt="">
@@ -146,19 +146,25 @@
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
-                                  <fieldset>
-                                    <input name="uId" type="text" rows="6" class="form-control" id="uId" placeholder="设计人员"></input>
-                                  </fieldset>
+                                  <!-- <fieldset> -->
+                                    <!-- <input name="uId" type="text" rows="6" class="form-control" id="uId" placeholder="设计人员"></input> -->
+                                 	<span>设计人员:</span><select id="uId">
+                                 	</select>
+                                  <!-- </fieldset> -->
                                 </div>
                                 <div class="col-md-12">
-                                  <fieldset>
-                                    <input name="checkId" type="text" rows="6" class="form-control" id="checkId" placeholder="审图人员"></input>
-                                  </fieldset>
+                                  <!-- <fieldset> -->
+                                  	<span>审图人员:</span><select id="checkId">
+                                  	</select>
+                                    <!-- <input name="checkId" type="text" rows="6" class="form-control" id="checkId" placeholder="审图人员"></input> -->
+                                  <!-- </fieldset> -->
                                 </div>
                                 <div class="col-md-12">
-                                  <fieldset>
-                                    <input name="authorizedId" type="text" rows="6" class="form-control" id="authorizedId" placeholder="审核人员"></input>
-                                  </fieldset>
+                                  <!-- <fieldset> -->
+                                    <span>审核人员</span><select id="authorizedId">
+                                    </select>
+                                    <!-- <input name="authorizedId" type="text" rows="6" class="form-control" id="authorizedId" placeholder="审核人员"></input> -->
+                                  <!-- </fieldset> -->
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
@@ -215,6 +221,7 @@
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 	<!--<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>-->
 	<script type="text/javascript" src="js/jquery.min.js" ></script>
+	<script type="text/javascript" src="js/jquery.cookie.js" ></script>
     <script src="js/vendor/bootstrap.min.js"></script>
     
     <script src="js/datepicker.js"></script>
@@ -239,18 +246,19 @@
 	            event.preventDefault();
 	            $('#main-nav').toggleClass("open");
 	        });
+	        modifyProject(1);
 	    });
-	    var cookie = document.cookie;
-	    var uName = '';
+	    //var cookie = document.cookie;
+	    var uName = $.cookie("name");
+	    var uId = $.cookie('id');
+	    $("p.userInfo").val("欢迎您，" + uName);
 	    var phone = '';
 	    var mail = '';
-	    if(cookie == null || typeof(cookie) == 'undefined') {
-	    	window.location.href = 'userLogin.html';
-	    }else{
-	    	uName = cookie.split("=")[1];
-	    	$("#uName").val(uName);
+	    if(typeof(uName) == 'undefined' || uName.trim() == '') {
+	    	alert("你还未登陆，请先登陆!");
+	    	window.location.href = 'login.html';
 	    }
-    	//var a2Class = $("#a2").attr('class');
+    	$("#uName").val(uName);
     	function viewProfile(){
     		var myChart = echarts.init($("#graph").get(0));
          	var option = {
@@ -299,7 +307,6 @@
 	        	}
 	        });
     	}
-    	//var a3Class = $("#a3").attr('class');
     	function managerUser(){
     		var uName = document.cookie.split("=")[1];
     		$.ajax({
@@ -365,6 +372,37 @@
 	    	}
 	    	return false;
 	    }
+	    $("input#pType").blur(function(){
+	    	var myPtype = $("input#pType").val();
+	    	if(myPtype.trim() == ''){
+	    		alert('工程专业类别不能为空');
+	    		return;
+	    	}
+	    	var myDesign = $("select#uId");
+	    	var myCheck = $("select#checkId");
+	    	var myCheck2 = $("select#authorizedId");
+	    	myDesign.empty();
+	    	myCheck.empty();
+	    	myCheck2.empty();
+	    	var successFunction = function(obj){
+	    		var myFunction = function(result){
+	    			if(result.state == 1){
+		    			alert(result.message);
+		    		}else{
+		    			var data = result.data;
+		    			obj.append($("<option></option>"));
+		    			for(var i=0;i<data.length;i++){
+		    				var option = $("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
+		    				obj.append(option);
+		    			}
+		    		}
+	    		}
+	    		return myFunction;
+	    	};
+	    	sendRequest("post","nUser/findUsersByMajor.do",{major:myPtype,userType:1},successFunction(myDesign))
+	    	sendRequest("post","nUser/findUsersByMajor.do",{major:myPtype,userType:2},successFunction(myCheck))
+	    	sendRequest("post","nUser/findUsersByMajor.do",{major:myPtype,userType:3},successFunction(myCheck2));
+	    });
 	    $("#form-submit").click(function(){
 	    	var pName = $("#pName");
 	    	var unitName = $("#unitName");
@@ -382,8 +420,11 @@
 	    	if(!cPhone.val().match(phoneReg)){
 	    		alert("手机号格式不正确，请填写正确的手机号");
 	    	}
+	    	uId = uId.trim() == ''?-1:uId;
+	    	checkId = checkId.trim() == ''?-1:checkId;
+	    	authorizedId = authorizedId.trim() == ''?-1:authorizedId;
 	    	$.ajax({
-	    		type:"get",
+	    		type:"post",
 	    		url:"Project/add.do",
 	    		async:true,
 	    		dataType : 'json',
@@ -417,8 +458,74 @@
 	        	}
 	    	});
 	    });
-	    function modify(){
-	    	
+	    function sendRequest(type,url,data,successFunction){
+	    	$.ajax({
+	    		type:type,
+	    		url:url,
+	    		async:true,
+	    		data :data,
+	    		success:successFunction,
+	    		error:function(){
+	    			alert('发生了未知的错误，请稍后重新尝试');
+	    		}
+	    	});
+	    }
+	    function modifyProject(pageNo){
+	    	if(typeof(pageNo)=='undefined'){
+	    		pageNo = 1;
+	    	}
+	    	var tbody = $(".projectBody");
+	    	tbody.empty();
+	    	$.ajax({
+	    		type:"get",
+	    		url:"Project/searchProjects.do",
+	    		async:true,
+	    		data:{
+	    			pg : pageNo
+	    		},
+	    		dataType:'json',
+	    		success:function(result){
+	    			if(result.state == 0){
+	    				tbody.empty();
+	    				var data = result.data.list;
+	    				for(var i=0;i<data.length;i++){
+	    					var item = data[i];
+	    					var tr = $("<tr></tr>");
+	    					tr.append($("<td style='display:none'>" + data[i].pid + "</td>"));
+	    					tr.append($("<td>" + data[i].pName + "</td>"));
+	    					tr.append($("<td>" + data[i].unitName + "</td>"));
+	    					tr.append($("<td>" + data[i].contacts + "</td>"));
+	    					tr.append($("<td>" + data[i].cPhone + "</td>"));
+	    					tr.append($("<td>" + data[i].pType + "</td>"));
+	    					tr.append($("<td>" + data[i].uid + "</td>"));
+	    					tr.append($("<td>" + data[i].checkId + "</td>"));
+	    					tr.append($("<td>" + data[i].authorizedId + "</td>"));
+	    					var td = $("<td><button onclick='modify(this);'>修改</button></td>");
+	    					tr.append(td);
+	    					tbody.append(tr);
+	    				}
+	    				var page = $(".pagination");
+	    				//page.append($("<li class=''>&laquo;</a></li>"));
+	    				for(var i=1;i<=result.data.lastPage;i++){
+	    					page.append($("<li class='>"+i+"'></li>"));
+	    				}
+	    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
+	    				var ul = $("li");
+	    				for(var i=0;i<ul.length;i++){
+	    					var li = ul.get(i);
+	    					li.addEventListener('click',function(evt){
+								var pn = this.getAttribute('class');
+								view(0,pn);
+							});
+	    				}
+	    			}else{
+	    				alert(result.message);
+	    			}
+	    		},
+	    		error:function(){
+	    			alert('发生了未知错误，请检查网络后重新尝试');
+	    		}
+	    	});
 	    }
 	    function modifyUserInfo(){
 	    	if(!phoneCheck()){
@@ -431,8 +538,8 @@
 				return;
 			}
 			if(email == mail && phone == $("#phone").val()){
+				alert('信息未发生改动');
 				return;
-				alert('未改变任何内容');
 			}
 			var data = {};
 			if(email != mail){
@@ -450,7 +557,6 @@
 					data: data,
 					success:function(result){
 						var data = result.data;
-						data = eval('(' + data + ')');
 						$("#phone").val(data.phone);
 						$("#mail").val(data.mail);
 						alert("修改信息成功");
@@ -462,65 +568,22 @@
 			}
 	    }
 	    function modifyPwd(){
-	    	window.location.href = "modifyPwd.html?name=" + uName;
+	    	window.location.href = "modifyPwd.html";
 	    }
-	    function view(status,pageNo){
-    	var tbody = $(".projectBody");
-    	if(typeof(pageNo)=='undefined' || !Number.isNaN(pageNo)){
-    		pageNo = 1;
-    	}
-    	$.ajax({
-    		type:"get",
-    		url:"Project/searchProjectsByStatus.do",
-    		async:true,
-    		data:{
-    			status:status,
-    			pg : pageNo
-    		},
-    		dataType:'json',
-    		success:function(result){
-    			if(result.state == 0){
-    				tbody.empty();
-    				var data = result.data.list;
-    				data = eval('(' + data + ')');
-    				for(var i=0;i<data.length;i++){
-    					var item = data[i];
-    					var tr = $("<tr></tr>");
-    					tr.append($("<td style='display:none'>" + data[i].pid + "</td>"));
-    					tr.append($("<td>" + data[i].pName + "</td>"));
-    					tr.append($("<td>" + data[i].unitName + "</td>"));
-    					tr.append($("<td>" + data[i].contacts + "</td>"));
-    					tr.append($("<td>" + data[i].cPhone + "</td>"));
-    					tr.append($("<td>" + data[i].pType + "</td>"));
-    					tr.append($("<td>" + data[i].uid + "</td>"));
-    					tr.append($("<td>" + data[i].checkId + "</td>"));
-    					tr.append($("<td>" + data[i].authorizedId + "</td>"));
-    					tr.apend($("<td><button class='modify' onclick='modify(this)'>修改</button></td>"));
-    					tbody.append(tr);
-    				}
-    				var page = $(".pagination");
-    				//page.append($("<li class=''>&laquo;</a></li>"));
-    				for(var i=1;i<=result.data.lastPage;i++){
-    					page.append($("<li class='>"+i+"'></li>"));
-    				}
-    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
-    				var ul = $("li");
-    				for(var i=0;i<ul.length;i++){
-    					var li = ul.get(i);
-    					li.addEventListener('click',function(evt){
-							var pn = this.getAttribute('class');
-							view(0,pn);
-						});
-    				}
-    			}else{
-    				alert(result.message);
-    			}
-    		},
-    		error:function(){
-    			alert('发生了未知错误，请检查网络后重新尝试');
-    		}
-    	});
-    }
+	    /* function view(status,pageNo){
+	    	if(typeof(pageNo)=='undefined' || !Number.isNaN(pageNo)){
+	    		pageNo = 1;
+	    	}
+	    } */
+	    function modify(str){
+	    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
+	    	window.location.href = 'editProject.html?pid=' + id + "&uName="+uName;
+	    }
+	    function out(){
+	    	$.cookie("name",null);
+			$.cookie("uId",null);
+			window.location.href = 'login.html';
+	    }
     </script>
 </body>
 </html>

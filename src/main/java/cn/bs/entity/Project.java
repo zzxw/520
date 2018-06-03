@@ -8,7 +8,7 @@ public class Project {
 	private String checkName;
 	private Integer authorizedId;
 	private String authorizedName;
-	private String majorType;
+	private Integer majorType;
 	private String pName;
 	private Integer pType;
 	private String unitName;
@@ -17,7 +17,7 @@ public class Project {
 	private Integer status;
 	private String blueprint;
 	private String advise;
-	
+	private String result;
 	public Project() {
 		super();
 	}
@@ -25,8 +25,8 @@ public class Project {
 	
 
 	public Project(Integer pid, Integer uid, String uName, Integer checkId, String checkName, Integer authorizedId,
-			String authorizedName, String majorType, String pName, Integer pType, String unitName, String contacts,
-			String cPhone, Integer status, String blueprint, String advise) {
+			String authorizedName, Integer majorType, String pName, Integer pType, String unitName, String contacts,
+			String cPhone, Integer status, String blueprint, String advise,String result) {
 		super();
 		this.pid = pid;
 		this.uid = uid;
@@ -44,6 +44,7 @@ public class Project {
 		this.status = status;
 		this.blueprint = blueprint;
 		this.advise = advise;
+		this.result = result;
 	}
 
 
@@ -56,11 +57,11 @@ public class Project {
 		this.pid = pid;
 	}
 
-	public String getMajorType() {
+	public Integer getMajorType() {
 		return majorType;
 	}
 
-	public void setMajorType(String majorType) {
+	public void setMajorType(Integer majorType) {
 		this.majorType = majorType;
 	}
 
@@ -168,7 +169,13 @@ public class Project {
 		this.uName = uName;
 	}
 
+	public String getResult() {
+		return result;
+	}
 
+	public void setResult(String result) {
+		this.result = result;
+	}
 
 	public String getCheckName() {
 		return checkName;

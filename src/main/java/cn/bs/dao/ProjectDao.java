@@ -18,4 +18,5 @@ public interface ProjectDao {
 	List<HashMap<String, String>>getTotal(int id);
 	List<Result> findProjectsForAdmin();
 	List<Result> findProjectsForUser(Integer id);
+	List<Project>viewProject(Integer id);
 }

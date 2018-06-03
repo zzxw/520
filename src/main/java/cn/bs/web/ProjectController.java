@@ -1,5 +1,6 @@
 package cn.bs.web;
 
+import java.io.File;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -26,38 +27,23 @@ public class ProjectController extends BaseController{
 	@Resource
 	private ProjectService projectService;
 	
-	@Resource
-	private NUserService ns;
-	
 	@RequestMapping("/add.do")
 	@ResponseBody
 	//返回值：{state:0,data:{id...}}
 	//返回值：{state:1,message:"用户名..."}
 
-	public JsonResult<Project> add(Integer uid,Integer checkId,Integer authorizedId,String majorType,String pName,
+	public JsonResult<Project> add(Integer uid,Integer checkId,Integer authorizedId,Integer majorType,String pName,
 			Integer pType,String unitName,String contacts,String cPhone,Integer status){
 		Project project = new Project();
-		if(authorizedId != null) {
-			project.setAuthorizedId(authorizedId);
-			NUser nUser = ns.findById(authorizedId);
-			project.setAuthorizedName(nUser.getuName());
-		}
-		if(checkId != null) {
-			project.setCheckId(checkId);
-			NUser nUser = ns.findById(checkId);
-			project.setCheckName(nUser.getuName());
-		}
+		project.setAuthorizedId(authorizedId);
+		project.setCheckId(checkId);
 		project.setContacts(contacts);
 		project.setcPhone(cPhone);
 		project.setMajorType(majorType);
 		project.setpName(pName);
 		project.setpType(pType);
 		project.setStatus(status);
-		if(uid!=null) {
-			project.setUid(uid);
-			NUser nUser = ns.findById(uid);
-			project.setuName(nUser.getuName());
-		}
+		project.setUid(uid);
 		project.setUnitName(unitName);
 		projectService.add(project);
 		return new JsonResult<Project>(project);
@@ -68,7 +54,7 @@ public class ProjectController extends BaseController{
 	@RequestMapping("/update.do")
 	@ResponseBody
 	public JsonResult<Project> update(
-			Integer uid,String name,Integer checkId,Integer authorizedId,Integer pid,String majorType,String pName,
+			Integer uid,String name,Integer checkId,Integer authorizedId,Integer pid,Integer majorType,String pName,
 			Integer pType,String unitName,String contacts,String cPhone,Integer status,String blueprint,String advise){
 		Project project = new Project();
 		project.setPid(pid);
@@ -112,18 +98,18 @@ public class ProjectController extends BaseController{
 	
 	@RequestMapping("/searchProjectsByStatus.do")
 	@ResponseBody
-	public JsonResult<PageInfo> searchProjects(@RequestParam(value="pn", defaultValue="1")Integer pn,Integer status){
+	public JsonResult<PageInfo> searchProjects(@RequestParam(value="pn", defaultValue="1")Integer pn,Integer status,Integer id,String type){
 		PageHelper.startPage(pn,5);
 		List<Project> list = null;
 		if(status == null){
 			list = projectService.findProjects();
 		} else{
-			list = projectService.findProjectsByStatus(status);
+			list = projectService.findProjectsByStatus(status,id,type);
 		}
 		PageInfo<List<Project>> page = new PageInfo(list,5);
 	 	return new JsonResult<PageInfo>(page);
 	}
-	
+		
 	@RequestMapping("/statistics.do")
 	@ResponseBody
 	public JsonResult<String> statistics(String iden,Integer id){		
@@ -158,6 +144,22 @@ public class ProjectController extends BaseController{
 		PageHelper.startPage(pn,5);
 		List<Project> list = projectService.findProjects();
 		PageInfo<List<Project>> page = new PageInfo(list,5);
+		return new JsonResult<PageInfo<List<Project>>>(page);
+	}
+	
+	@RequestMapping("/view.do")
+	@ResponseBody
+	public JsonResult<String> view(Integer id){
+		String result = projectService.view(id);
+		return new JsonResult<String>(result);
+	}
+	
+	@RequestMapping("/viewProjects.do")
+	@ResponseBody
+	public JsonResult<PageInfo<List<Project>>> viewProjects(@RequestParam(value="pn", defaultValue="1")Integer pn,Integer id,Integer userType){
+		PageHelper.startPage(pn,5);
+		List<Project> result = projectService.viewProjects(id, userType);
+		PageInfo<List<Project>> page = new PageInfo(result,5);
 		return new JsonResult<PageInfo<List<Project>>>(page);
 	}
 }

@@ -20,18 +20,22 @@ values
 	<update id="update" parameterType="cn.bs.entity.Project">
 	    update  projects 
     	<set>
-    		<if test="uid != null">uid = #{uid>,</if>
-    		<if test="checkId != null">checkId = #{checkId>,</if>
-    		<if test="authorizedId != null">authorizedId = #{authorizedId>,</if>
-    		<if test="majorType != null">majorType = #{majorType>,</if>
-    		<if test="pName != null">pName = #{pName>,</if>
-    		<if test="pType != null">pType = #{pType>,</if>
-    		<if test="cPhone != null">cPhone = #{cPhone>,</if>
-    		<if test="status != null">status = #{status>,</if>
-    		<if test="contacts != null">contacts = #{contacts>,</if>
-    		<if test="unitName != null">unitName = #{unitName>,</if>
-    		<if test="blueprint != null">blueprint = #{blueprint></if>
-    		<if test="advise != null">advise = #{advise}</if>
+    		<if test="uid != null">uid = #{uid},</if>
+    		<if test="checkId != null">checkId = #{checkId},</if>
+    		<if test="authorizedId != null">authorizedId = #{authorizedId},</if>
+    		<if test="majorType != null">majorType = #{majorType},</if>
+    		<if test="pName != null">pName = #{pName},</if>
+    		<if test="pType != null">pType = #{pType},</if>
+    		<if test="cPhone != null">cPhone = #{cPhone},</if>
+    		<if test="status != null">status = #{status},</if>
+    		<if test="contacts != null">contacts = #{contacts},</if>
+    		<if test="unitName != null">unitName = #{unitName},</if>
+    		<if test="blueprint != null">blueprint = #{blueprint},</if>
+    		<if test="advise != null">advise = #{advise},</if>
+    		<if test="result != null">result = #{result},</if>
+    		<if test="uName != null">uName = #{uName},</if>
+    		<if test="checkName != null">checkName = #{checkName},</if>
+    		<if test="authorizedName != null">authorizedName = #{authorizedName}</if>
     	</set>
     		where pid=#{pid}
 	</update>
@@ -75,7 +79,12 @@ values
 	
 	<select id="getTotal"
 		parameterType="int"
-		resultType="list">
+		resultType="cn.bs.entity.Result">
 		select count(*),status from projects where (uid=#{id} or checkid=#{id} or authorizedId=#{id})group by status
+	</select>
+	<select id="viewProject"
+		parameterType="int"
+		resultType="cn.bs.entity.Project">
+		select * from projects where (uid=#{id} or checkid=#{id} or authorizedId=#{id})group by status
 	</select>
 </mapper>

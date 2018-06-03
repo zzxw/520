@@ -11,6 +11,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //Meta-Tags -->
 
@@ -36,6 +37,7 @@
 			</form>
 			<div class="send-button w3layouts agileits">
 				<input type="button" onclick="submit();" value="登录"/>
+				<input type="button" onclick="regist();" value="注册" />
 			</div>
 			<div class="clear"></div>
 		</div><div class="copyrights">Collect from <a href="http://www.cssmoban.com/" >CopyRight@Hyit2018 Fz</a></div>
@@ -85,8 +87,10 @@
 						if(result.state == 1){
 							alert(result.message);
 						}else if(result.state == 0) {
+							$.cookie('uName', result.data.uName);
+							$.cookie('uId',result.data.uid);
 							window.location.href = 'index1.html';
-							document.cookie="uName" + result.data.uName;
+							//document.cookie="uName" + result.data.uName;
 						}
 					}
 				})
@@ -108,6 +112,9 @@
 				return false;
 			}
 			return true;
+		}
+		function regist(){
+			window.location.href = "regist1.html";
 		}
 </script>
 

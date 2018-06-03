@@ -1,21 +1,22 @@
 package cn.bs.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.poi.ss.formula.functions.Count;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
 import cn.bs.dao.ProjectDao;
+import cn.bs.entity.NUser;
 import cn.bs.entity.Project;
 import cn.bs.entity.Result;
+import cn.bs.service.NUserService;
 import cn.bs.service.NameException;
 import cn.bs.service.ProjectService;
 import cn.bs.tools.Tools;
@@ -28,6 +29,10 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Resource
 	private ProjectDao projectDao;
+	
+	@Resource
+	private NUserService ns;
+	
 	public Project add(Project project) {
 		if(Tools.isEmpty(project.getpName() + project.getUnitName() + project.getContacts() + project.getcPhone())){
 			throw new NameException("必填信息不能为空，请检查后重新输入提交");
@@ -36,9 +41,10 @@ public class ProjectServiceImpl implements ProjectService {
 		if(!project.getcPhone().matches(phoneReg)){
 			throw new NameException("手机号格式不正确，请检查后重新输入");
 		}
-		if(project.getUid() == null) {
+		if(project.getUid() == null || project.getUid() ==-1) {
 			project.setStatus(0);
 		}else {
+			setVariousName(project);
 			project.setStatus(1);
 		}
 		boolean isSuccess = projectDao.add(project);
@@ -55,8 +61,23 @@ public class ProjectServiceImpl implements ProjectService {
 		MAPPER.put(3, "已完成");
 	}
 	
+	public String setName(Integer id,String errMsg) {
+		if(id!=null && id!=-1) {
+			NUser user = ns.findById(id);
+			if(user == null) {
+				throw new NameException(errMsg);
+			}
+			return user.getuName();
+		}
+		return null;
+	}
+	public void setVariousName(Project project) {
+		project.setuName(setName(project.getUid(), "该设计人员不存在或者发生了未知的错误，请稍后重新尝试"));
+		project.setCheckName(setName(project.getCheckId(), "该审图人员不存在或者发生了未知的错误，请稍后重新尝试"));
+		project.setAuthorizedName(setName(project.getAuthorizedId(), "该审核人员不存在或者发生了未知的错误，请稍后重新尝试"));
+	}
 	public boolean update(Project project) {
-		Project oldProject = projectDao.search(project.getPid());
+		/*Project oldProject = projectDao.search(project.getPid());
 		if(oldProject.getStatus() == 0 && project.getUid()==null){
 			return true;
 		}
@@ -65,12 +86,21 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		if(oldProject.getStatus() == 2 && project.getAuthorizedId()==null){
 			return true;
+		}*/
+		setVariousName(project);
+		if(project.getBlueprint()!=null && project.getBlueprint().trim()!=null) {
+			project.setStatus(1);
+		}
+		if(project.getAdvise()!=null && project.getAdvise().trim()!=null) {
+			project.setStatus(2);
+		}
+		if(project.getResult()!=null && project.getResult().trim()!=null) {
+			project.setStatus(3);
 		}
 		boolean isSuccess = projectDao.update(project);
 		if(!isSuccess) {
 			throw new NameException("项目信息更新失败，请稍候重新尝试");
 		}
-		project.setStatus(oldProject.getStatus()+1);
 		return true;
 	}
 
@@ -101,12 +131,38 @@ public class ProjectServiceImpl implements ProjectService {
 		return list;
 	}
 
-	public List<Project> findProjectsByStatus(int status) {
+	public List<Project> findProjectsByStatus(int status,Integer id,String type) {
+		if(id == null) {
+			throw new NameException("用户不能为空，请清除缓存后重新登录尝试");
+		}
 		if(status < 0){
 			status = 0;
 		}
+		if(type == null) {
+			type = "design";
+		}
 		List<Project> list = projectDao.findProjectsByStatus(status);
-		return list;
+		List<Project> result = new ArrayList<Project>();
+		if("design".equals(type)) {
+			for (Project project : list) {
+				if(project.getUid() == id) {
+					result.add(project);
+				}
+			}
+		}else if("check".equals(type)){
+			for (Project project : list) {
+				if(project.getCheckId() == id) {
+					result.add(project);
+				}
+			}
+		}else {
+			for (Project project : list) {
+				if(project.getAuthorizedId() == id) {
+					result.add(project);
+				}
+			}
+		}
+		return result;
 	}
 	
 	public boolean uploadImg(HttpRequest request) {
@@ -169,6 +225,55 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		Gson gson = new Gson();
 		return gson.toJson(data);
+	}
+
+	public String view(Integer id) {
+		if(id == null || id==-1) {
+			throw new NameException("发生了未知的错误，请重新登录后尝试");
+		}
+		Project project = projectDao.search(id);
+		if(project == null) {
+			throw new NameException("该项目不存在，请重新尝试");
+		}
+		String filePath = "d:" +File.separator + "fzTemp" +File.separator+ "test.bat";
+		File file = new File(filePath);
+		String path = project.getBlueprint();
+		if(path == null || "null".equals(path)) {
+			throw new NameException("图纸文件不存在!!!");
+		}
+		String content = "@echo off\nstart "+path;
+		boolean isSuccess = true;
+		try {
+			isSuccess = Tools.writeTxtFile(content, file);
+		} catch (Exception e) {
+			throw new NameException("发生了未知的错误，请稍后重新尝试");
+		}
+		return "success";
+	}
+
+	public List<Project> viewProjects(Integer id, Integer userType) {
+		List<Project> list = projectDao.viewProject(id);
+		List<Project> result = new ArrayList<Project>();
+		if(userType == 0) {
+			for (Project project : list) {
+				if(project.getUid()!=null &&project.getUid() == id) {
+					result.add(project);
+				}
+			}
+		}else if(userType == 1) {
+			for (Project project : list) {
+				if(project.getCheckId()!=null &&project.getCheckId() == id) {
+					result.add(project);
+				}
+			}
+		}else {
+			for (Project project : list) {
+				if(project.getAuthorizedId()!=null &&project.getAuthorizedId() == id) {
+					result.add(project);
+				}
+			}
+		}
+		return result;
 	}
 	
 }

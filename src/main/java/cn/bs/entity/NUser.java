@@ -7,14 +7,14 @@ public class NUser {
 	private String phone;
 	private String mail;
 	private String address;
-	private String major;
+	private Integer major;
 	private Integer userType;
 	
 	public NUser() {
 		super();
 	}
 	
-	public NUser(Integer uid, String uName, String pwd,String mail,Integer userType,String phone, String address, String major) {
+	public NUser(Integer uid, String uName, String pwd,String mail,Integer userType,String phone, String address, Integer major) {
 		super();
 		this.uid = uid;
 		this.uName = uName;
@@ -60,10 +60,10 @@ public class NUser {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getMajor() {
+	public Integer getMajor() {
 		return major;
 	}
-	public void setMajor(String major) {
+	public void setMajor(Integer major) {
 		this.major = major;
 	}
 

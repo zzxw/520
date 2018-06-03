@@ -52,9 +52,9 @@
 			uName = #{uName}
 	</select>
 	<select id="findUsersByMajor"
-		parameterType="string"	
+		parameterType="int"	
 		resultType="cn.bs.entity.NUser">
-		select * from users where major = #{major}
+		select * from users where major = #{major} and userType = #{userType}
 	</select>
 	
 	<select id="findUsersByType"

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+		<title></title>
+	</head>
+	<body background="img/fifth_bg.jpg">
+		<div class="slide" id="5">
+          	<div class="content fourth-content">
+          		<div class="modifyProject">
+          			<table class="table table-striped">
+          				<thead align="center">
+							<tr style="color:yellow">
+								<th>项目名称</th>
+								<th>单位名称</th>
+								<th>联系人</th>
+								<th>联系方式</th>
+								<th>项目类型</th>
+								<th>设计人员</th>
+								<th>审图人员</th>
+								<th>审核人员</th>
+								<th>修改</th>
+							</tr>
+						</thead>
+						<tbody class="projectBody">
+						</tbody>
+          			</table>
+          			<ul class="pagination">
+					</ul><br>
+          		</div>
+          	</div>
+          </div>
+	</body>
+	<script>
+		var uName = $.cookie('uName');
+		var uId = $.cookie('uId');
+		var userType = 0;
+		$(document).ready(function(){
+		 	$.ajax({
+		 		type:"post",
+		 		url:"nUser/find.do",
+		 		async:true,
+		 		dataType:'json',
+		 		data:{
+		 			name : uName
+		 		},
+		 		success:function(result){
+		 			if(result.state == 0){
+		 				userType == result.data.userType;
+		 			}else{
+		 				//alert('请重新登录后再行尝试');
+		 			}
+		 		}
+		 	});
+		 	loadProjects(1);
+		 });
+		 function loadProjects(pageNo){
+			 var tbody = $(".projectBody");
+				$.ajax({
+			 		type:"post",
+			 		url:"Project/viewProjects.do",
+			 		async:true,
+			 		dataType:'json',
+			 		data:{
+			 			id : uId,
+			 			userType:userType,
+			 			pn : pageNo
+			 		},
+			 		success:function(result){
+			 			if(result.state == 0){
+			 				tbody.empty();
+		    				var data = result.data.list;
+		    				for(var i=0;i<data.length;i++){
+		    					var item = data[i];
+		    					var tr = $("<tr></tr>");
+		    					tr.append($("<td style='display:none'>" + data[i].pid + "</td>"));
+		    					tr.append($("<td>" + data[i].pName + "</td>"));
+		    					tr.append($("<td>" + data[i].unitName + "</td>"));
+		    					tr.append($("<td>" + data[i].contacts + "</td>"));
+		    					tr.append($("<td>" + data[i].cPhone + "</td>"));
+		    					tr.append($("<td>" + data[i].pType + "</td>"));
+		    					tr.append($("<td>" + data[i].uid + "</td>"));
+		    					tr.append($("<td>" + data[i].checkId + "</td>"));
+		    					tr.append($("<td>" + data[i].authorizedId + "</td>"));
+		    					var td = $("<td><button onclick='view(this);'>查看</button></td>");
+		    					tr.append(td);
+		    					tbody.append(tr);
+		    				}
+		    				var page = $(".pagination");
+		    				//page.append($("<li class=''>&laquo;</a></li>"));
+		    				for(var i=1;i<=result.data.lastPage;i++){
+		    					page.append($("<li class='>"+i+"'></li>"));
+		    				}
+		    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
+		    				var ul = $("li");
+		    				for(var i=0;i<ul.length;i++){
+		    					var li = ul.get(i);
+		    					li.addEventListener('click',function(evt){
+									var pn = this.getAttribute('class');
+									view(0,pn);
+								});
+		    				}
+			 			}else{
+			 				alert(result.message);
+			 			}
+			 		}
+			 	});
+		 }
+		 function view(str){
+		 	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
+	    	window.location.href = 'viewProjectDetail.html?pid=' + id;
+		 }
+	</script>
+</html>

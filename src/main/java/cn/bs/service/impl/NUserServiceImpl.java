@@ -44,6 +44,9 @@ public class NUserServiceImpl implements NUserService {
 		if(Tools.isEmpty(user.getuName() + user.getPwd())){
 			throw new NameException("用户名或密码不能为空");
 		}
+		if(user.getUserType() == null) {
+			user.setUserType(0);
+		}
 		NUser nUser = findByName(user.getuName());
 		if(nUser!=null){
 			throw new NameException("该用户名已存在！！！请更换用户名重新注册");
@@ -82,11 +85,12 @@ public class NUserServiceImpl implements NUserService {
 		}
 	}
 
-	public List<HashMap<String,String>> findUsersByMajor(String major) {
-		if(Tools.isEmpty(major)) {
-			major = "";
+	public List<HashMap<String,String>> findUsersByMajor(Integer major,Integer userType) {
+		if(major == null || userType ==null) {
+			major = 0;
+			userType = 0;
 		}
-		List<NUser> list = nUserDao.findUsersByMajor(major);
+		List<NUser> list = nUserDao.findUsersByMajor(major,userType);
 		List<HashMap<String, String>> result = new ArrayList<HashMap<String,String>>();
 		for (NUser nUser : list) {
 			HashMap<String,String> map = new HashMap<String, String>();

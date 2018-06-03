@@ -21,7 +21,7 @@ public class NUserController extends BaseController{
 	
 	@RequestMapping("/regist.do")
 	@ResponseBody
-	public JsonResult<NUser> regist(String uName,String pwd,String phone,String mail,String address,String major,Integer userType){
+	public JsonResult<NUser> regist(String uName,String pwd,String phone,String mail,String address,Integer major,Integer userType){
 		NUser nUser = new NUser();
 		nUser.setAddress(address);
 		nUser.setMail(mail);
@@ -44,7 +44,7 @@ public class NUserController extends BaseController{
 	@RequestMapping("/update.do")
 	@ResponseBody
 	public JsonResult<Boolean> update
-	(String uName,String pwd,String phone,String mail,String address,String major,Integer userType){
+	(String uName,String pwd,String phone,String mail,String address,Integer major,Integer userType){
 		NUser nUser = new NUser();
 		nUser.setAddress(address);
 		nUser.setMajor(major);
@@ -74,8 +74,8 @@ public class NUserController extends BaseController{
 	
 	@RequestMapping("/findUsersByMajor.do")
 	@ResponseBody
-	public JsonResult<List<HashMap<String, String>>> findUsersByMajor(String major){
-		List<HashMap<String, String>> list = nService.findUsersByMajor(major);
+	public JsonResult<List<HashMap<String, String>>> findUsersByMajor(Integer major,Integer userType){
+		List<HashMap<String, String>> list = nService.findUsersByMajor(major,userType);
 		return new JsonResult<List<HashMap<String, String>>>(list);
 	}
 	

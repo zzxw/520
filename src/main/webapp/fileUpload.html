@@ -2,13 +2,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>		
 <title>Insert title here</title>
 </head>
 <body>
 	<h1>HelloWorld</h1>
 	<form action="file/upload.do" method="post" enctype="multipart/form-data">  
-        选择文件:<input type="file" name="file" width="120px">  
+        选择文件:<input type="file" name="file" width="120px">
+        <input type="text" name="uName" id="uName" style="display: none;"/>
+        <input type="text" name="pId" id="pId" style="display: none;"/>  
     	<input type="submit" value="上传">
     </form>  
 </body>
+<script>
+	$("input#uName").val('test');
+	$("input#pId").val(1);
+</script>
 </html>

@@ -33,12 +33,12 @@
 	    	alert(uName);
 	    	alert('发生了未知的错误，请重新登录');
 	    	window.location.href = 'login.html';
-	    } */	    
-	    var uName = $.cookie("name");
-	    var uId = $.cookie('id');
-	    if(typeof(uName)=='undefined' ||uName.trim() == ''){
+	    } */
+	    var uName = $.cookie('uName');
+	    var uId = $.cookie('uId');
+	    if(typeof(uName) =='undefined' || uName.trim() ==''){
 	    	alert('请重新登录');
-	    	window.location.href = 'login.html';
+	    	window.location.href = 'userLogin.html';
 	    }
 		function submit(){
 			var pwdReg = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
@@ -51,7 +51,7 @@
 			}
 			$.ajax({
 				type:"get",
-				url:"worker/find.do",
+				url:"nUser/find.do",
 				async:true,
 				dataType:'json',
 				data: {
@@ -71,18 +71,19 @@
 						var uid = data.id;
 						$.ajax({
 							type:"post",
-							url:"worker/update.do",
+							url:"nUser/changePwd.do",
 							async:true,
 							dataType:'json',
 							data:{
-								uid:uid,
+								name : uName,
+								pwd :oPwd,
 								pwd:nPwd
 							},
 							success:function(result){
 								if(data.state == 0){
 									var data = result.data;
-									$.cookie('name',uName);
-									window.location.href = 'index.html?uName=' + uName;
+									$.cookie("uName",uName);
+									window.location.href = 'index1.html?uName=' + uName;
 								}else{
 									alert(result.message);
 								}

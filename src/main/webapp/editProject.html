@@ -10,14 +10,14 @@
               <div class="col-md-9">
                   <div class="viewProjects">
                   	<span>项目名称</span><input name="name" type="text" class="form-control" id="pName" placeholder="项目名称"><br />
-                  	<span>项目单位</span><input name="unit" type="text"  class="form-control" id="pName" placeholder="项目单位"><br />
-                  	<span>联系人    </span><input name="contact" type="text"  class="form-control" id="pName" placeholder="联系人"><br />
-                  	<span>手机号</span><input name="phone" type="text"  class="form-control" id="pName" placeholder="手机号"><br />
-                  	<span>专业类别</span><input name="majorType" type="text" class="form-control" id="pName" placeholder="专业类别"><br />
-                  	<span>设计人员</span><input name="uID" type="text"  class="form-control" id="pName" placeholder="设计人员"><br />
-                  	<span>审图人员</span><input name="checkID" type="text" class="form-control" id="pName" placeholder="审图人员"><br />
+                  	<span>项目单位</span><input name="unit" type="text"  class="form-control" id="unit" placeholder="项目单位"><br />
+                  	<span>联系人    </span><input name="contact" type="text"  class="form-control" id="contact" placeholder="联系人"><br />
+                  	<span>手机号</span><input name="phone" type="text"  class="form-control" id="phone" placeholder="手机号"><br />
+                  	<span>专业类别</span><input name="majorType" type="text" class="form-control" id="majorType" placeholder="专业类别" disabled="disabled"><br />
+                  	<span>设计人员</span><input name="uID" type="text"  class="form-control" id="uID" placeholder="设计人员"><br />
+                  	<span>审图人员</span><input name="checkID" type="text" class="form-control" id="checkID" placeholder="审图人员"><br />
                   	<span>审图意见</span><input name="advise" type="text" class="form-control" id="advise" placeholder="审图意见" disabled="disabled"><br />
-                  	<span>审核人员</span><input name="authorizedID" type="text"  class="form-control" id="pName" placeholder="审核人员"><br />
+                  	<span>审核人员</span><input name="authorizedID" type="text"  class="form-control" id="authorizedID" placeholder="审核人员"><br />
                   	<button onclick="submit();"style="width: 100px;">提交修改</button>
                   	<button onclick="cancel();" style="width: 100px;">返回</button>
                   </div>
@@ -32,16 +32,15 @@
 		$(document).ready(function(){
 			$.ajax({
 				type:"get",
-				url:"project/find.do",
+				url:"Project/find.do",
 				async:true,
 				dataType:'json',
 				data:{
-					pid : pid
+					id : pid
 				},
 				success:function(result){
 					if(result.state == 0){
 						var data = result.data;
-						data = eval('(' + data + ')');
 						$("input#pName").val(data.pName);
 						$("input#unit").val(data.unitName);
 						$("input#phone").val(data.cPhone);
@@ -57,7 +56,8 @@
 					//alert('发生了未知错误，请稍候重新尝试');
 				}
 			});
-			function check(){
+		});
+		function check(){
 				if($("input#pName").val().trim() == ''){
 					alert('项目名称不能为空');
 					return false;
@@ -86,7 +86,7 @@
 				}
 				$.ajax({
 					type:"post",
-					url:"project/update.do",
+					url:"Project/update.do",
 					async:true,
 					data:{
 						pid : pid
@@ -94,6 +94,7 @@
 					dataType : 'json',
 					success : function(result){
 						if(result.state == 0){
+							alert('修改项目信息成功');
 							window.location.href = 'index.html?uName=' + uName;
 						}else{
 							alert(result.message);
@@ -104,7 +105,6 @@
 					}
 				});
 			}
-		})
 		function cancel(){
 			window.location.href="index.html";
 		}

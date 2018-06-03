@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>		
+		<title></title>
+	</head>
+	<body background="img/fifth_bg.jpg">
+		<div class="container-fluid">
+              <div class="col-md-9">
+                  <div class="viewProjects">
+                  <form action="file/upload.do" method="post" enctype="multipart/form-data"> 
+	                  	<span>项目名称</span><input name="name" type="text" class="form-control" id="pName" placeholder="项目名称" disabled="disabled"><br />
+	                  	<span>项目单位</span><input name="unit" type="text"  class="form-control" id="unit" placeholder="项目单位" disabled="disabled"><br />
+	                  	<span>联系人    </span><input name="contact" type="text"  class="form-control" id="contacy" placeholder="联系人" disabled="disabled"><br />
+	                  	<span>手机号</span><input name="phone" type="text"  class="form-control" id="phone" placeholder="手机号" disabled="disabled"><br />
+	                  	<span>专业类别</span><input name="majorType" type="text" class="form-control" id="majorType" placeholder="专业类别" disabled="disabled"><br />
+	                  	<span>设计人员</span><input name="uName" type="text"  class="form-control" id="uName1" placeholder="设计人员" disabled="disabled"><br />
+						<div class="choose">选择图纸:<input type="file" name="file" width="120px">  
+					        <input type="text" name="uName" id="uName" style="display: none;"/>
+					        <input type="text" name="pId" id="pId" style="display: none;"/><br/>
+					    	</div>
+					    <div class="view" style="display: none;"><a href='Webshell:hello'>查看旧图纸</a></div>
+	                  	<span>审图人员</span><input name="checkName" type="text" class="form-control" id="checkName" placeholder="审图人员" disabled="disabled"><br />
+	                  	<span>审图意见</span><input name="advise" type="text" class="form-control" id="advise" placeholder="审图意见" disabled="disabled"><br />
+	                  	<span>审核人员</span><input name="authorizedName" type="text"  class="form-control" id="NaauthorizedName" placeholder="审核人员" disabled="disabled"><br />
+	                  	<!--<button onclick="submit();"style="width: 100px;">提交修改</button>-->
+	                  	<input type="submit" value="上传">
+	                  	<button onclick="cancel();" style="width: 100px;">返回</button>
+	                  </form>
+                  </div>
+              </div>
+          </div>
+	</body>
+	<script type="text/javascript" src="js/getParameter.js" ></script>
+	<script>
+		var param = getParameter();
+		var pid = param['pid'];
+		var uName = param['uName'];
+		$("input#uName").val(uName);
+		$("input#pId").val(pid);
+		$(document).ready(function(){
+			$("div.view").css('display','none');
+			$.ajax({
+				type:"post",
+				url:"Project/find.do",
+				async:true,
+				dataType:'json',
+				data:{
+					id : pid
+				},
+				success:function(result){
+					if(result.state == 0){
+						var data = result.data;
+						$("input#pName").val(data.pName);
+						$("input#unit").val(data.unitName);
+						$("input#phone").val(data.cPhone);
+						$("input#pName").val(data.pName);
+						$("input#majorType").val(data.majorType);
+						$("input#uName1").val(data.uName);
+						$("input#checkName").val(data.checkName);
+						$("input#authorizedName").val(data.authorizedName);
+						var bluePrint = data.blueprint;
+						if(bluePrint!='null' && bluePrint.trim()!=''){
+							$("div.view").removeAttr("style");
+						}
+					}else{
+						alert(result.message);
+					}
+				},error:function(){
+					//alert('发生了未知错误，请稍候重新尝试');
+				}
+			});
+		})
+		/*function check(){
+				if($("input#pName").val().trim() == ''){
+					alert('项目名称不能为空');
+					return false;
+				}
+				if($("input#unit").val().trim == ''){
+					alert('项目单位不能为空');
+					return false;
+				}
+				if($("input#phone").val().trim == ''){
+					alert('手机好不能为空');
+					return false;
+				}
+				var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+				if(!$("input#phone").val().match(phoneReg)){
+					alert('请输入正确的手机号');
+					return false;
+				}
+				if($("input#majorType").val().trim == ''){
+					alert('工程类别不能为空');
+					return false;
+				}
+			}
+			function submit(){
+				if(!check()){
+					return;
+				}
+				$.ajax({
+					type:"post",
+					url:"project/update.do",
+					async:true,
+					data:{
+						pid : pid
+					},
+					dataType : 'json',
+					success : function(result){
+						if(result.state == 0){
+							window.location.href = 'index.html?uName=' + uName;
+						}else{
+							alert(result.message);
+						}
+					},
+					error : function(){
+						//alert('发生了未知错误，请稍候重新尝试');
+					}
+				});
+			}*/
+		function cancel(){
+			window.location.href = 'index1.html';
+		}
+	</script>
+</html>

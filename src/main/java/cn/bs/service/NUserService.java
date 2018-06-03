@@ -11,7 +11,7 @@ public interface NUserService {
 	NUser login(String name,String pwd);
 	NUser regist(NUser user);
 	boolean updateInfo(NUser nUser);
-	List<HashMap<String,String>> findUsersByMajor(String major);
+	List<HashMap<String,String>> findUsersByMajor(Integer major,Integer userType);
 	List<HashMap<String,String>> findUsersByType(int userType);
 	boolean changePwd(String userName,String pwd,String newPwd);
 }

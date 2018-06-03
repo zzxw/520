@@ -37,7 +37,7 @@ public class FileController {
 	@ResponseBody
 	public String upload(MultipartFile file,HttpServletRequest request){  
         String path = "d:" + File.separator +"fzTemp";
-        String pId = request.getParameter("pId");
+        Integer pId = Integer.valueOf(request.getParameter("pId"));
         String userName = request.getParameter("uName");
         path = path + File.separator + pId;
 		String fileName = file.getOriginalFilename();
@@ -45,9 +45,15 @@ public class FileController {
 		Integer userID = user.getUid();
 		String filePath = path + fileName;
 		Project project = new Project();
+		project.setPid(pId);
 		project.setBlueprint(filePath);
 		project.setUid(userID);
+		project.setuName(userName);
 		projectService.update(project);
+		File newDir = new File(path);
+		if(!newDir.exists()) {
+			newDir.mkdirs();
+		}
         File dir = new File(path,fileName);          
         if(!dir.exists()){  
             dir.mkdirs();  
@@ -58,7 +64,7 @@ public class FileController {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
-        return "success";  
+        return "<script>alert('success');window.location.href='../index1.html';</script>";  
 	}
 	
 	@RequestMapping("/download")
