@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="css/css/templatemo-main.css" />
+		<link rel="stylesheet" href="css/my.css" />
+		<script type="text/javascript" src="img/js/jquery-3.2.0.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+		<script type="text/javascript" src="img/js/vendor/bootstrap.js" ></script>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/bootstrap-theme.css" />
+		<title></title>
+	</head>
+	<body>
+		<div class="slide" id="5">
+          	<div class="content fourth-content">
+          		<div class="modifyProject">
+          			<table class="table table-striped">
+          				<thead align="center">
+							<tr style="color:green">
+								<th>项目名称</th>
+								<th>单位名称</th>
+								<th>联系人</th>
+								<th>联系方式</th>
+								<th>项目类型</th>
+								<th>设计人员</th>
+								<th>审图人员</th>
+								<th>审核人员</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody class="projectBody">
+						</tbody>
+          			</table>
+          			<ul class="pagination">
+					   
+					</ul><br>
+          		</div>
+          	</div>
+          </div>
+          <div><button onclick="back();">返回首页</button></div>                
+	</body>
+	<script>
+		var uName = $.cookie("name");
+	    var uId = $.cookie('id');
+	    if(uName == null || typeof(uName)=='undefined' || uName.trim()==''){
+	    	alert('请登录');
+	    	window.location.href='login.html';
+	    }
+	    modifyProject(1);
+		function modifyProject(pageNo){
+	    	if(typeof(pageNo)=='undefined'){
+	    		pageNo = 1;
+	    	}
+	    	var tbody = $(".projectBody");
+	    	tbody.empty();
+	    	$.ajax({
+	    		type:"get",
+	    		url:"Project/searchProjects.do",
+	    		async:true,
+	    		data:{
+	    			pg : pageNo
+	    		},
+	    		dataType:'json',
+	    		success:function(result){
+	    			if(result.state == 0){
+	    				tbody.empty();
+	    				var data = result.data.list;
+	    				for(var i=0;i<data.length;i++){
+	    					var item = data[i];
+	    					var tr = $("<tr></tr>");
+	    					tr.append($("<td style='display:none'>" + data[i].pid + "</td>"));
+	    					tr.append($("<td>" + data[i].pName + "</td>"));
+	    					tr.append($("<td>" + data[i].unitName + "</td>"));
+	    					tr.append($("<td>" + data[i].contacts + "</td>"));
+	    					tr.append($("<td>" + data[i].cPhone + "</td>"));
+	    					tr.append($("<td>" + data[i].pType + "</td>"));
+	    					tr.append($("<td>" + data[i].uName + "</td>"));
+	    					tr.append($("<td>" + data[i].checkName + "</td>"));
+	    					tr.append($("<td>" + data[i].authorizedName + "</td>"));
+	    					var td = $("<td><button onclick='modify(this);'>修改</button></td>");
+	    					tr.append(td);
+	    					tbody.append(tr);
+	    				}
+	    				var page = $(".pagination");
+	    				//page.append($("<li class=''>&laquo;</a></li>"));
+	    				for(var i=1;i<=result.data.lastPage;i++){
+	    					page.append($("<li class='>"+i+"'></li>"));
+	    				}
+	    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
+	    				var ul = $("li");
+	    				for(var i=0;i<ul.length;i++){
+	    					var li = ul.get(i);
+	    					li.addEventListener('click',function(evt){
+								var pn = this.getAttribute('class');
+								view(0,pn);
+							});
+	    				}
+	    			}else{
+	    				alert(result.message);
+	    			}
+	    		},
+	    		error:function(){
+	    			alert('发生了未知错误，请检查网络后重新尝试');
+	    		}
+	    	});
+	    }
+	    function modify(str){
+	    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
+	    	window.location.href = 'editProject.html?pid=' + id + "&uName="+uName;
+	    }
+	    function phoneCheck(){
+	    	var cPhone = $("#phone").val();
+	    	if(cPhone == null || typeof(cPhone)=='undefined' || cPhone.trim() == '') {
+	    		return false;
+	    		alert("手机号不能为空!!!!");
+	    	}
+	    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+	    	if(!cPhone.match(phoneReg)){
+	    		return false;
+	    		alert("手机号格式不正确，请填写正确的手机号");
+	    	}
+	    	if(cPhone == phone){
+	    		return false;
+	    	}
+	    }
+	    function back(){
+	    	window.location.href='index.html';
+	    }
+	</script>
+</html>

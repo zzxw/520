@@ -47,7 +47,7 @@
           </div>
           <ul>
             <li><a href="#1" id="a1"><i class="fa fa-home"></i> <em>Home</em></a></li>
-            <li><a href="#2" id="a2" onclick="viewProfile();"><i class="fa fa-image"></i> <em>Profile</em></a></li>
+            <li><a id="a2" onclick="viewProfile();"><i class="fa fa-image"></i> <em>Profile</em></a></li>
             <li><a href="#3" id="a3" onclick="managerUser();"><i class="fa fa-user"></i> <em>user Manager</em></a></li>
           </ul>
         </nav>
@@ -62,8 +62,8 @@
                   <div class="col-md-9">
                       <h2>Overview</h2>
                       <ul class="operate-project">
-                      	<li><a href="#4"class="active" onclick="uploadDrawing(1);">上传图纸</a></li>
-                      	<li><a href="#5" onclick="modifyProject(1);;">修改图纸</a></li>
+                      	<li><a href="#4"class="active" onclick="window.location.href='uploadProject.html'">修改项目</a></li>
+                      	<!--<li><a href="#5" onclick="modifyProject(1);">修改图纸</a></li>-->
                       	<li><a href="#" onclick="window.location.href='modify1.html';">查看项目</a></li>
                       	<input type="text" hidden="hidden" id="uName"></input>
                       </ul>
@@ -122,38 +122,6 @@
                     </div>
           	</div>
           </div>
-          <div class="slide" id="4">
-            <div class="content fifth-content">
-                <div class="container-fluid">
-                    <div class="col-md-6">
-                    </div>
-                    <div class="col-md-6">
-                        <div class="uploadDrawings">
-		          			<table class="table table-striped">
-		          				<thead align="center">
-									<tr style="color:yellow">
-										<th>项目名称</th>
-										<th>单位名称</th>
-										<th>联系人</th>
-										<th>联系方式</th>
-										<th>项目类型</th>
-										<th>设计人员</th>
-										<th>审图人员</th>
-										<th>审核人员</th>
-										<th>上传</th>
-									</tr>
-								</thead>
-								<tbody class="projectBody">
-								</tbody>
-		          			</table>
-		          			<ul class="pagination">
-							</ul><br>
-		          		</div>
-                    </div>
-                </div>
-            </div>
-          </div>
-	    
 	      	<div class="content fourth-content">
 	      		<div class="projectContainer"></div>
 	      	</div>
@@ -203,54 +171,7 @@
 	    	window.location.href = 'userLogin.html';
 	    }
     	function viewProfile(){
-    		var myChart = echarts.init($("#graph").get(0));
-         	var option = {
-				title : {
-					text : 'test'
-				},
-				tooltip : {
-			        trigger: 'item',
-			        formatter: "{a} <br/>{b} : {c} ({d}%)"
-			    },
-				legend : {
-					data : []
-				},
-				series : {
-					name : 'test',
-					type : 'pie',
-					label : {
-						normal : {
-							show : true,
-							formatter: '{b}:{c}: ({d}%)',
-							textStyle : {
-								fontWeight : 'normal',
-								fontSize : 14
-							}
-						}
-					}, 
-					data : []
-				}
-			};
-	        $.ajax({
-	        	type:"get",
-	        	url:"Project/userStatistics.do",
-	        	async:true,
-	        	dataType : 'json',
-	        	data:{
-	        		id : uId
-	        	},
-	        	success:function(result){
-	        		var data;
-	        		if(result.state == 0){
-	        			data = result.data;
-	        			option.legend.data = data;
-	        			option.series.data = data;        			
-	        			myChart.setOption(option);
-	        		}else{
-	        			alert(result.message);
-	        		}
-	        	}
-	        });
+    		window.location.href="graph1.html";
     	}
     	function managerUser(){
     		$.ajax({
@@ -407,7 +328,7 @@
 	    	});
 	    });*/
 	   
-	   function uploadDrawing(pageNo){
+	   /*function uploadDrawing(pageNo){
 	    	if(typeof(pageNo) == 'undefined'){
 	    		pageNo = 1;
 	    	}
@@ -454,7 +375,7 @@
     			}
 	    	}
 	    	sendRequest("post","Project/searchProjectsByStatus.do",{pn:1,status:1,id:uId,type:'design'},success)
-	    }
+	    }*/
 		function sendRequest(type,url,data,successFunction){
 	    	$.ajax({
 	    		type:type,
@@ -467,7 +388,7 @@
 	    		}
 	    	});
 	    }
-	    function modifyProject(pageNo){
+	    /*function modifyProject(pageNo){
 	    	if(typeof(pageNo)=='undefined'){
 	    		pageNo = 1;
 	    	}
@@ -526,7 +447,7 @@
 	    			alert('发生了未知错误，请检查网络后重新尝试');
 	    		}
 	    	});
-	    }
+	    }*/
 	    function modifyUserInfo(){
 	    	if(!phoneCheck()){
 	    		return;

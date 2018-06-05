@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="css/css/templatemo-main.css" />
+		<link rel="stylesheet" href="css/my.css" />
+		<script type="text/javascript" src="img/js/jquery-3.2.0.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+		<script type="text/javascript" src="img/js/vendor/bootstrap.js" ></script>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/bootstrap-theme.css" />
+		<title></title>
+	</head>
+	<body>
+		<div class="slide" id="5">
+            <div class="content fifth-content">
+                <div class="container-fluid">
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="uploadDrawings">
+		          			<table class="table table-striped">
+		          				<thead align="center">
+									<tr style="color:yellow">
+										<th>项目名称</th>
+										<th>单位名称</th>
+										<th>联系人</th>
+										<th>联系方式</th>
+										<th>项目类型</th>
+										<th>设计人员</th>
+										<th>审图人员</th>
+										<th>审核人员</th>
+										<th>上传</th>
+									</tr>
+								</thead>
+								<tbody class="projectBody">
+								</tbody>
+		          			</table>
+		          			<ul class="pagination">
+							</ul><br>
+		          		</div>
+                    </div>
+                </div>
+            </div>
+          </div>   
+          <button onclick="back();">返回首页</button>
+	</body>
+	<script>
+		var uName = $.cookie("uName");
+	    var uId = $.cookie('id');
+	    function back(){
+	    	window.location.href="index1.html";
+	    }
+	    modifyProject(1);
+	    function modifyProject(pageNo){
+	    	if(typeof(pageNo)=='undefined'){
+	    		pageNo = 1;
+	    	}
+	    	var tbody = $("div#5").find(".projectBody");
+	    	tbody.empty();
+	    	$.ajax({
+	    		type:"get",
+	    		url:"Project/searchProjectsByStatus.do",
+	    		async:true,
+	    		data:{
+	    			pg : pageNo,
+	    			status:2,
+	    			id:uId,
+	    			type:'design'
+	    		},
+	    		dataType:'json',
+	    		success:function(result){
+	    			if(result.state == 0){
+	    				tbody.empty();
+	    				var data = result.data.list;
+	    				for(var i=0;i<data.length;i++){
+	    					var item = data[i];
+	    					var tr = $("<tr></tr>");
+	    					tr.append($("<td style='display:none'>" + data[i].pid + "</td>"));
+	    					tr.append($("<td>" + data[i].pName + "</td>"));
+	    					tr.append($("<td>" + data[i].unitName + "</td>"));
+	    					tr.append($("<td>" + data[i].contacts + "</td>"));
+	    					tr.append($("<td>" + data[i].cPhone + "</td>"));
+	    					tr.append($("<td>" + data[i].pType + "</td>"));
+	    					tr.append($("<td>" + data[i].uid + "</td>"));
+	    					tr.append($("<td>" + data[i].checkId + "</td>"));
+	    					tr.append($("<td>" + data[i].authorizedId + "</td>"));
+	    					var td = $("<td><button onclick='upload(this);'>修改</button></td>");
+	    					tr.append(td);
+	    					tbody.append(tr);
+	    				}
+	    				var page = $(".pagination");
+	    				//page.append($("<li class=''>&laquo;</a></li>"));
+	    				for(var i=1;i<=result.data.lastPage;i++){
+	    					page.append($("<li class='>"+i+"'></li>"));
+	    				}
+	    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
+	    				var ul = $("li");
+	    				for(var i=0;i<ul.length;i++){
+	    					var li = ul.get(i);
+	    					li.addEventListener('click',function(evt){
+								var pn = this.getAttribute('class');
+								view(0,pn);
+							});
+	    				}
+	    			}else{
+	    				alert(result.message);
+	    			}
+	    		},
+	    		error:function(){
+	    			alert('发生了未知错误，请检查网络后重新尝试');
+	    		}
+	    	});
+	    }
+		function upload(str){
+	    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
+	    	$.ajax({
+				type:"post",
+				url:"nUser/find.do",
+				async:true,
+				dataType:'json',
+				data:{
+					name : uName
+				},
+				success:function(result){
+					if(result.state == 0){
+						var userType = result.data.userType;
+						if(userType == 0){
+							window.location.href = 'editProject1.html?pid=' + uId + "&uName="+uName;	
+						}else if(userType ==1){
+							window.location.href = 'editProject2.html?pid=' + uId + "&uName="+uName + "userType=" + userType;
+						}else{
+							window.location.href = 'editProject3.html?pid=' + uId + "&uName="+uName + "userType=" + userType;
+						}
+					}else{
+						alert(result.message);
+					}
+				}
+			})
+	    	window.location.href = 'editProject1.html?pid=' + uId + "&uName="+uName;
+	    }
+	</script>
+</html>

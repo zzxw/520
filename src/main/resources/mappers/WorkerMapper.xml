@@ -26,7 +26,7 @@
 	    	<if test="mail != null">mail = #{mail},</if>
 	    	<if test="phone != null">phone = #{phone}</if>
 	    </set>
-	    where id=#{id}
+	    where uid=#{uid}
 	</update>
 	<select id="findById"
 		parameterType="int"

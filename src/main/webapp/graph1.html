@@ -7,7 +7,6 @@
 		<title></title>
 	</head>
 	<body>
-		<h2>项目信息统计</h2>
 		<div id="graph" style="width: 400px; height: 400px;"></div>
 		<div class="menu">
 			<button class="return" onclick="back();">返回首页</button>
@@ -26,21 +25,8 @@
 				legend : {
 					data : []
 				},
-				toolbox: {
-			        show : true,
-			        feature : {
-			            mark : {show: true},
-			            dataView : {show: true, readOnly: false},
-			            magicType : {
-			                show: true,
-			                type: ['pie', 'funnel']
-			            },
-			            restore : {show: true},
-			            saveAsImage : {show: true}
-			        }
-			    },
 				series : {
-					name : 'test',
+					name : 'statistics',
 					type : 'pie',
 					label : {
 						normal : {
@@ -57,14 +43,16 @@
 			};
 	        $.ajax({
 	        	type:"get",
-	        	url:"Project/adminStatistics.do",
+	        	url:"Project/userStatistics.do",
 	        	async:true,
 	        	dataType : 'json',
+	        	data:{
+	        		id : uId
+	        	},
 	        	success:function(result){
 	        		var data;
 	        		if(result.state == 0){
 	        			data = result.data;
-	        			data = eval('(' +data + ')');
 	        			option.legend.data = data;
 	        			option.series.data = data;        			
 	        			myChart.setOption(option);
@@ -74,7 +62,7 @@
 	        	}
 	        });
 	        function back(){
-	        	location.href='index.html';
+	        	location.href='index1.html';
 	        }
 	</script>
 </html>

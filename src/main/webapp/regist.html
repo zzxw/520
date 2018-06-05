@@ -36,8 +36,9 @@
 			<input type="text" class="mail" Name="Email" placeholder="邮箱" required="">
 			<input type="text" class="add" Name="Address" placeholder="地址" required="">
 			<!--<input type="text" class="majorType" Name="Major" placeholder="专业类别" required="">-->
-			<br/><span>专业类别</span><select class="major"><option></option><option value="0">设施</option></select>
-			<br/><span>身份类型</span><select class="userType">
+			<!--<input type="text" class="majorType" Name="Major" placeholder="专业类别" required="">-->
+			<br/><span style="background-color: #398439;">专业类别</span><select class="major"><option></option><option value="0">结施</option></select>
+			<br/><span style="background-color: #398439;">身份类型</span><select class="userType">
 				<option value="1">审图人员</option>
 				<option value="2">审核人员</option>
 			</select>
@@ -64,7 +65,7 @@
 			return false;
 		}
 		var pwdReg = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
-		if(!$(".password").val().match(pwdReg)){
+		if(!$(".pwd").val().match(pwdReg)){
 			alert("请输入正确的手机号格式");
 			return false;
 		}
@@ -85,9 +86,12 @@
 			alert("地址不能为空，请检查后重新输入");
 			return false;
 		}
+		return true;
 	}
 	function submit() {
-		check();
+		if(!check()){
+			return;
+		}
 		var data = {
 			uName : $(".name").val(),
 			pwd : $(".pwd").val(),
@@ -104,7 +108,8 @@
 			data : data,
 			dataType : 'json',
 			success:function(result) {
-				if(result.status == 0){
+				if(result.state == 0){
+					alert('注册成功');
 					window.location.href = 'userLogin.html?uName=' + $(".name").val();
 				}else{
 					alert(result.message);

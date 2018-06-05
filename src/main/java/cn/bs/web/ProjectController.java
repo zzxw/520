@@ -1,6 +1,5 @@
 package cn.bs.web;
 
-import java.io.File;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,9 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import cn.bs.entity.NUser;
 import cn.bs.entity.Project;
-import cn.bs.service.NUserService;
 import cn.bs.service.ProjectService;
 import cn.bs.util.JsonResult;
 

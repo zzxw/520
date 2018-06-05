@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="css/css/templatemo-main.css" />
+		<link rel="stylesheet" href="css/my.css" />
+		<script type="text/javascript" src="img/js/jquery-3.2.0.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+		<script type="text/javascript" src="img/js/vendor/bootstrap.js" ></script>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/bootstrap-theme.css" />
+		<title></title>
+	</head>
+	<body>
+		<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+				<div class="control-group">
+					 <label class="control-label" for="inputEmail">项目名称</label>
+					<div class="controls">
+						<input name="name" type="text" class="form-control" id="pName" placeholder="项目名称" required="">
+					</div>
+				</div>
+				<div class="control-group">
+					 <label class="control-label" for="inputPassword">项目单位</label>
+					<div class="controls">
+						<input name="unitName" type="text" class="form-control" id="unitName" placeholder="项目单位" required="">
+					</div>
+				</div>
+				<div class="control-group">
+					 <label class="control-label" for="inputPassword">联系人</label>
+					<div class="controls">
+						<input name="contacts" type="text" class="form-control" id="contacts" placeholder="联系人" required="">
+					</div>
+				</div>
+				<div class="control-group">
+					 <label class="control-label" for="inputPassword">手机号</label>
+					<div class="controls">
+						<input name="cPhone" type="tel" rows="6" class="form-control" id="cPhone" placeholder="手机号" required="" onblur="phoneCheck();"></input>
+					</div>
+				</div>
+				<div class="control-group">
+					 <label class="control-label" for="inputPassword">专业类别</label>
+					<div class="controls">
+						<input name="major" type="text" rows="6" class="form-control" id="pType" placeholder="专业类别" required=""></input>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<span style="background-color: #398439;">设计人员</span><select id="uId">
+                     	</select>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<span style="background-color: #398439;">审图人员:</span><select id="checkId">
+                                  	</select>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						 <span style="background-color: #398439;">审核人员</span><select id="authorizedId">
+                         </select>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						 <button id="form-submit" class="btn">增加工程</button>
+					</div>
+				</div>
+		</div>
+	</div>
+</div>
+	</body>
+	<script>
+		var uName = $.cookie("name");
+	    var id = $.cookie('id');
+	    if(uName == null || typeof(uName)=='undefined' || uName.trim()==''){
+	    	alert('请登录');
+	    	window.location.href='login.html';
+	    }
+		$("#form-submit").click(function(){
+	    	var pName = $("#pName");
+	    	var unitName = $("#unitName");
+	    	var contacts = $("#contacts");
+	    	var cPhone = $("#cPhone");
+	    	var pType = $("#pType");
+	    	var uId = $("#uId");
+	    	var checkId = $("#checkId");
+	    	var authorizedId = $("#authorizedId");
+	    	if(isEmpty(pName.val()) || isEmpty(unitName.val()) || isEmpty(contacts.val()) || isEmpty(cPhone.val()) || isEmpty(pType.val())) {
+	    		alert("所有字段均需填写");
+	    		return;
+	    	}
+	    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+	    	if(!cPhone.val().match(phoneReg)){
+	    		alert("手机号格式不正确，请填写正确的手机号");
+	    	}
+	    	var uId2 = uId.val().trim() == ''?-1:uId.val();
+	    	var checkId2 = checkId.val().trim() == ''?-1:checkId.val();
+	    	var authorizedId2 = authorizedId.val().trim() == ''?-1:authorizedId.val();
+	    	$.ajax({
+	    		type:"post",
+	    		url:"Project/add.do",
+	    		async:true,
+	    		dataType : 'json',
+	    		data : {
+	    			pName : pName.val(),
+	    			unitName : unitName.val(),
+	    			contacts : contacts.val(),
+	    			cPhone : cPhone.val(),
+	    			pType : pType.val(),
+	    			uId : uId2,
+	    			checkId : checkId2,
+	    			authorizedId : authorizedId2
+	    		},
+	        	success:function(result){
+	        		if(result.state == 0){
+	        			pName.val('');
+	        			unitName.val('');
+	        			contacts.val('');
+	        			cPhone.val('');
+	        			pType.val('');
+	        			uId.val('');
+	        			checkId.val('');
+	        			authorizedId.val('');
+	        			window.location.href="index.html";
+	        		}else{
+	        			alert(result.message);
+	        		}
+	        	},
+	        	error:function(){
+	        		alert("发生了未知的错误，请重新尝试");
+	        	}
+	    	});
+	    });
+	    $("input#pType").blur(function(){
+	    	var myPtype = $("input#pType").val();
+	    	if(myPtype.trim() == ''){
+	    		alert('工程专业类别不能为空');
+	    		return;
+	    	}
+	    	var myDesign = $("select#uId");
+	    	var myCheck = $("select#checkId");
+	    	var myCheck2 = $("select#authorizedId");
+	    	myDesign.empty();
+	    	myCheck.empty();
+	    	myCheck2.empty();
+	    	var successFunction = function(obj){
+	    		var myFunction = function(result){
+	    			if(result.state == 1){
+		    			alert(result.message);
+		    		}else{
+		    			var data = result.data;
+		    			obj.append($("<option></option>"));
+		    			for(var i=0;i<data.length;i++){
+		    				var option = $("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
+		    				obj.append(option);
+		    			}
+		    		}
+	    		}
+	    		return myFunction;
+	    	};
+	    	sendRequest("post","nUser/findUsersByMajor.do",{major:myPtype,userType:1},successFunction(myDesign))
+	    	sendRequest("post","nUser/findUsersByMajor.do",{major:myPtype,userType:2},successFunction(myCheck))
+	    	sendRequest("post","nUser/findUsersByMajor.do",{major:myPtype,userType:3},successFunction(myCheck2));
+	    });
+	    function phoneCheck(){
+	    	var cPhone = $("#phone").val();
+	    	if(cPhone == null || typeof(cPhone)=='undefined' || cPhone.trim() == '') {
+	    		return false;
+	    		alert("手机号不能为空!!!!");
+	    	}
+	    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+	    	if(!cPhone.match(phoneReg)){
+	    		return false;
+	    		alert("手机号格式不正确，请填写正确的手机号");
+	    	}
+	    	if(cPhone == phone){
+	    		return false;
+	    	}
+	    	return true;
+	    }
+	    function sendRequest(type,url,data,successFunction){
+	    	$.ajax({
+	    		type:type,
+	    		url:url,
+	    		async:true,
+	    		data :data,
+	    		success:successFunction,
+	    		error:function(){
+	    			alert('发生了未知的错误，请稍后重新尝试');
+	    		}
+	    	});
+	    }
+	    function isEmpty(data){
+	    	if(data == null || typeof(data) == 'undefined' || data.trim()==''){
+	    		return true;
+	    	}
+	    	return false;
+	    }
+	</script>
+</html>
