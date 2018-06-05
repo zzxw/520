@@ -94,7 +94,7 @@ public class ProjectServiceImpl implements ProjectService {
 		if(project.getAdvise()!=null && project.getAdvise().trim()!=null) {
 			project.setStatus(2);
 		}
-		if(project.getResult()!=null && project.getResult().trim()!=null) {
+		if(project.getResult()!=null) {
 			project.setStatus(3);
 		}
 		boolean isSuccess = projectDao.update(project);

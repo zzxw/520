@@ -55,11 +55,14 @@
 	    	var tbody = $(".projectBody");
 	    	tbody.empty();
 	    	$.ajax({
-	    		type:"get",
-	    		url:"Project/searchProjects.do",
+	    		type:"post",
+	    		url:"Project/searchProjectsByStatus.do",
 	    		async:true,
 	    		data:{
-	    			pg : pageNo
+	    			pn:1,
+	    			status:2,
+	    			id:uId,
+	    			type:'design'
 	    		},
 	    		dataType:'json',
 	    		success:function(result){
@@ -89,13 +92,13 @@
 	    				}
 	    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
 	    				var ul = $("li");
-	    				for(var i=0;i<ul.length;i++){
+	    				/* for(var i=0;i<ul.length;i++){
 	    					var li = ul.get(i);
 	    					li.addEventListener('click',function(evt){
 								var pn = this.getAttribute('class');
 								view(0,pn);
 							});
-	    				}
+	    				} */
 	    			}else{
 	    				alert(result.message);
 	    			}
@@ -107,7 +110,7 @@
 	    }
 	    function modify(str){
 	    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
-	    	window.location.href = 'editProject.html?pid=' + id + "&uName="+uName;
+	    	window.location.href = 'editProject1.html?pid=' + id + "&uName="+uName;
 	    }
 	    function phoneCheck(){
 	    	var cPhone = $("#phone").val();
@@ -125,7 +128,7 @@
 	    	}
 	    }
 	    function back(){
-	    	window.location.href='index.html';
+	    	window.location.href='index1.html';
 	    }
 	</script>
 </html>

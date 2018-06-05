@@ -36,9 +36,12 @@ public class NUserServiceImpl implements NUserService {
 			throw new NameException("用户名和密码不能为空");
 		}
 		NUser user = nUserDao.findByName(name);
-		String md5 = 
+		/*String md5 = 
 				DigestUtils.md5Hex(pwd+"世界你好");
 		if(user == null || !md5.equals(user.getPwd())){
+			throw new NameException("用户名或密码错误，请检查后重新输入");
+		}*/
+		if(user == null || !pwd.equals(user.getPwd())){
 			throw new NameException("用户名或密码错误，请检查后重新输入");
 		}
 		return user;
@@ -56,9 +59,9 @@ public class NUserServiceImpl implements NUserService {
 			throw new NameException("该用户名已存在！！！请更换用户名重新注册");
 		}
 		checkInfo(user);
-		String md5 = 
+		/*String md5 = 
 				DigestUtils.md5Hex(user.getPwd()+"世界你好");
-		user.setPwd(md5);
+		user.setPwd(md5);*/
 		int i = nUserDao.regist(user);
 		if(i!=1){
 			throw new NameException("注册失败，请重新尝试");
@@ -70,11 +73,11 @@ public class NUserServiceImpl implements NUserService {
 		NUser nUser = findByName(user.getuName());
 		user.setUid(nUser.getUid());
 		checkInfo(user);
-		if(user.getPwd()!=null && user.getPwd().trim()!="") {
+		/*if(user.getPwd()!=null && user.getPwd().trim()!="") {
 			String md5 = 
 					DigestUtils.md5Hex(user.getPwd()+"世界你好");
 			user.setPwd(md5);
-		}
+		}*/
 		int i = nUserDao.updateInfo(user);
 		if(i!=1){
 			throw new NameException("修改信息失败，请重新尝试");

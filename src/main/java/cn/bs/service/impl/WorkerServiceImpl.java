@@ -32,8 +32,8 @@ public class WorkerServiceImpl implements WorkerService {
 			throw new NameException("用户名和密码不能为空");
 		}
 		Worker worker = workerDao.findByName(name);
-		String md5 = DigestUtils.md5Hex(pwd+"世界你好");
-		if(worker==null || !md5.equals(worker.getPwd())) {
+		//String md5 = DigestUtils.md5Hex(pwd+"世界你好");
+		if(worker==null || !pwd.equals(worker.getPwd())) {
 			throw new NameException("用户名或密码错误，请检查后重新输入");
 		}
 		return worker;
@@ -47,8 +47,8 @@ public class WorkerServiceImpl implements WorkerService {
 			throw new NameException("该用户名已经存在，请重新输入");
 		}
 		checkInfo(worker);
-		String md5 = DigestUtils.md5Hex(worker.getPwd()+"世界你好");
-		worker.setPwd(md5);
+		/*String md5 = DigestUtils.md5Hex(worker.getPwd()+"世界你好");
+		worker.setPwd(md5);*/
 		if(workerDao.regist(worker)!=1){
 			throw new NameException("抱歉，发生了未知错误，请稍后再试");
 		}
@@ -57,9 +57,9 @@ public class WorkerServiceImpl implements WorkerService {
 
 	public boolean updateInfo(Worker worker) {
 		checkInfo(worker);
-		if(worker.getPwd()!=null) {
+		/*if(worker.getPwd()!=null) {
 			worker.setPwd(DigestUtils.md5Hex(worker.getPwd()+"世界你好"));
-		}
+		}*/
 		int n = workerDao.update(worker);
 		if(n!=1){
 			throw new NameException("抱歉，发生了未知错误，请稍候再试");

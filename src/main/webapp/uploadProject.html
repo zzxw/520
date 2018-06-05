@@ -21,7 +21,7 @@
                         <div class="uploadDrawings">
 		          			<table class="table table-striped">
 		          				<thead align="center">
-									<tr style="color:yellow">
+									<tr style="color:green">
 										<th>项目名称</th>
 										<th>单位名称</th>
 										<th>联系人</th>
@@ -76,7 +76,7 @@
     					tr.append($("<td>" + data[i].uName + "</td>"));
     					tr.append($("<td>" + data[i].checkName + "</td>"));
     					tr.append($("<td>" + data[i].authorizedName + "</td>"));
-    					var td = $("<td><button onclick='upload(this);'>上传图纸</button></td>");
+    					var td = $("<td><button onclick='upload(this);'style='background-color: green;'>上传图纸</button></td>");
     					tr.append(td);
     					tbody.append(tr);
     				}
@@ -126,18 +126,18 @@
 					if(result.state == 0){
 						var userType = result.data.userType;
 						if(userType == 0){
-							window.location.href = 'editProject1.html?pid=' + uId + "&uName="+uName;	
+							window.location.href = 'editProject1.html?pid=' + id + "&uName="+uName;	
 						}else if(userType ==1){
-							window.location.href = 'editProject2.html?pid=' + uId + "&uName="+uName + "userType=" + userType;
+							window.location.href = 'editProject2.html?pid=' + id + "&uName="+uName + "userType=" + userType;
 						}else{
-							window.location.href = 'editProject3.html?pid=' + uId + "&uName="+uName + "userType=" + userType;
+							window.location.href = 'editProject3.html?pid=' + id + "&uName="+uName + "userType=" + userType;
 						}
 					}else{
 						alert(result.message);
 					}
 				}
 			})
-	    	window.location.href = 'editProject1.html?pid=' + uId + "&uName="+uName;
+	    	window.location.href = 'editProject1.html?pid=' + id + "&uName="+uName;
 	    }
 
 	</script>

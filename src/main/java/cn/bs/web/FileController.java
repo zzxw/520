@@ -41,6 +41,9 @@ public class FileController {
         String userName = request.getParameter("uName");
         path = path + File.separator + pId;
 		String fileName = file.getOriginalFilename();
+		if(fileName==null || fileName.trim() == "") {
+			return "alert('请选择文件并上传');";
+		}
 		NUser user = nService.findByName(userName);
 		Integer userID = user.getUid();
 		String filePath = path + fileName;

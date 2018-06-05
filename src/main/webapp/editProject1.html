@@ -25,7 +25,7 @@
 	                  	<span>审图意见</span><input name="advise" type="text" class="form-control" id="advise" placeholder="审图意见" disabled="disabled"><br />
 	                  	<span>审核人员</span><input name="authorizedName" type="text"  class="form-control" id="NaauthorizedName" placeholder="审核人员" disabled="disabled"><br />
 	                  	<!--<button onclick="submit();"style="width: 100px;">提交修改</button>-->
-	                  	<input type="submit" value="上传">
+	                  	<input type="submit"  onclick="check();"value="上传">
 	                  	<button onclick="cancel();" style="width: 100px;">返回</button>
 	                  </form>
                   </div>
@@ -121,6 +121,12 @@
 			}*/
 		function cancel(){
 			window.location.href = 'index1.html';
+		}
+		function check(){
+			if($(".choose").get(0).getElementsByTagName('input')[0].files.length == 0){
+				alert('请选择文件并上传');
+				return;
+			}
 		}
 	</script>
 </html>

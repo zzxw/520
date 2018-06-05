@@ -17,7 +17,7 @@ public class Project {
 	private Integer status;
 	private String blueprint;
 	private String advise;
-	private String result;
+	private Integer result;
 	public Project() {
 		super();
 	}
@@ -26,7 +26,7 @@ public class Project {
 
 	public Project(Integer pid, Integer uid, String uName, Integer checkId, String checkName, Integer authorizedId,
 			String authorizedName, Integer majorType, String pName, Integer pType, String unitName, String contacts,
-			String cPhone, Integer status, String blueprint, String advise,String result) {
+			String cPhone, Integer status, String blueprint, String advise,Integer result) {
 		super();
 		this.pid = pid;
 		this.uid = uid;
@@ -169,11 +169,11 @@ public class Project {
 		this.uName = uName;
 	}
 
-	public String getResult() {
+	public Integer getResult() {
 		return result;
 	}
 
-	public void setResult(String result) {
+	public void setResult(Integer result) {
 		this.result = result;
 	}
 

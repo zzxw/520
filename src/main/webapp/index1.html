@@ -62,8 +62,8 @@
                   <div class="col-md-9">
                       <h2>Overview</h2>
                       <ul class="operate-project">
-                      	<li><a href="#4"class="active" onclick="window.location.href='uploadProject.html'">修改项目</a></li>
-                      	<!--<li><a href="#5" onclick="modifyProject(1);">修改图纸</a></li>-->
+                      	<li><a href="#4"class="active" onclick="window.location.href='uploadProject.html'">上传图纸</a></li>
+                      	<li><a href="#5" onclick="window.location.href='editList.html'">修改图纸</a></li>
                       	<li><a href="#" onclick="window.location.href='modify1.html';">查看项目</a></li>
                       	<input type="text" hidden="hidden" id="uName"></input>
                       </ul>
@@ -98,17 +98,17 @@
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="phone" type="tel" rows="6" class="form-control" id="phone" placeholder="手机号" required="" disabled="disabled"></input>
+                                    <input name="phone" type="tel" rows="6" class="form-control" id="phone" placeholder="手机号" required=""></input>
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="mail" type="text" rows="6" class="form-control" id="mail" placeholder="用户邮箱" required="" disabled="disabled"></input>
+                                    <input name="mail" type="text" rows="6" class="form-control" id="mail" placeholder="用户邮箱" required=""></input>
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
                                   <fieldset>
-                                    <input name="address" type="text" rows="6" class="form-control" id="adress" placeholder="地址" required="" disabled="disabled"></input>
+                                    <input name="address" type="text" rows="6" class="form-control" id="address" placeholder="地址" required=""></input>
                                   </fieldset>
                                 </div>
                                 <div class="col-md-12">
@@ -223,23 +223,21 @@
 	    function phoneCheck(){
 	    	var cPhone = $("#phone").val();
 	    	if(cPhone == null || typeof(cPhone)=='undefined' || cPhone.trim() == '') {
-	    		return false;
 	    		alert("手机号不能为空!!!!");
+	    		return false;
 	    	}
 	    	var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
 	    	if(!cPhone.match(phoneReg)){
-	    		return false;
 	    		alert("手机号格式不正确，请填写正确的手机号");
-	    	}
-	    	if(cPhone == phone){
 	    		return false;
 	    	}
+	    	return true;
 	    }
 	    function isEmpty(data){
 	    	if(data == null || typeof(data) == 'undefined' || data.trim()==''){
-	    		return true;
+	    		return false;
 	    	}
-	    	return false;
+	    	return true;
 	    }
 	    /*$("input#pType").blur(function(){
 	    	var myPtype = $("input#pType").val();
@@ -477,7 +475,8 @@
 			if(oldAddress != address){
 				data.address = address;
 			}
-			if(data.length>0){
+			if(JSON.stringify(data) != '{}'){
+				data.uName = uName;
 				$.ajax({
 					type:"post",
 					url:"nUser/update.do",
@@ -485,11 +484,21 @@
 					dataType:'json',
 					data: data,
 					success:function(result){
-						var data = result.data;
-						$("#phone").val(data.phone);
-						$("#mail").val(data.mail);
-						$("#mail").val(data.address);
-						alert("修改信息成功");
+						if(result.state == 0){
+							alert('信息修改成功');
+							var data = result.data;
+							if(data.phone){
+								$("#phone").val(data.phone);
+							}
+							if(data.mail){
+								$("#mail").val(data.mail);
+							}
+							if(data.address){
+								$("#address").val(data.address);
+							}
+						}else{
+							alert(result.message);
+						}
 					},
 					error:function(){
 						
