@@ -66,6 +66,7 @@
 				<div class="control-group">
 					<div class="controls">
 						 <button id="form-submit" class="btn">增加工程</button>
+						 <button id="cancel();" class="cancel">返回</button>
 					</div>
 				</div>
 		</div>
@@ -134,6 +135,9 @@
 	        	}
 	    	});
 	    });
+		function cancel(){
+			window.location.href = 'index.html';
+		}
 	    $("input#pType").blur(function(){
 	    	var myPtype = $("input#pType").val();
 	    	if(myPtype.trim() == ''){

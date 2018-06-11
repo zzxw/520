@@ -70,6 +70,7 @@
 								<th>审图人员</th>
 								<th>审图意见</th>
 								<th>审核人员</th>
+								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody class="projectBody">
@@ -199,9 +200,12 @@
 
     <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script> -->
     <script type="text/javascript" src="js/jquery-1.10.2.min.js" ></script>
+    <script type="text/javascript" src="js/jquery.cookie.js" ></script>
     <script type="text/javascript" src="js/getParameter.js" ></script>
     <script type="text/javascript" src="js/echarts.js" ></script>
     <script type="text/javascript">
+    var uName = $.cookie("name");
+    var uId = $.cookie('id');
     $(document).ready(function() {
         $('.scroll-link').on('click', function(event){
             event.preventDefault();
@@ -216,9 +220,10 @@
             event.preventDefault();
             $('#main-nav').toggleClass("open");
         });
-        viewProjects(0,1);
+        viewProjects(1);
     });
-    function viewProjects(status,pageNo){
+    
+    function viewProjects(pageNo){
     	var tbody = $(".projectBody");
     	if(status==null|| typeof(status) =='undefined'){
     		status = 0;
@@ -227,11 +232,10 @@
     		pageNo = 1;
     	}
     	$.ajax({
-    		type:"get",
-    		url:"Project/searchProjectsByStatus.do",
+    		type:"post",
+    		url:"Project/Statistical.do",
     		async:true,
     		data:{
-    			status:status,
     			pg : pageNo
     		},
     		dataType:'json',
@@ -253,6 +257,8 @@
     					tr.append($("<td>" + data[i].checkName + "</td>"));
     					tr.append($("<td>" + data[i].advise + "</td>"));
     					tr.append($("<td>" + data[i].authorizedName + "</td>"));
+    					var td = $("<td><button onclick='viewProject(this);'>查看项目详细信息</button></td>");
+    					tr.append(td);
     					/* var td = $("<td><button class='modify' onclick='modify(this);'>修改</button></td>")
     					tr.append(td); */
     					tbody.append(tr);
@@ -279,6 +285,10 @@
     			alert('发生了未知错误，请检查网络后重新尝试');
     		}
     	});
+    }
+    function viewProject(str){
+    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
+    	window.location.href = 'viewProject.html?pid=' + id + "&uName="+uName;
     }
     // scroll function
     function scrollToID(id, speed){

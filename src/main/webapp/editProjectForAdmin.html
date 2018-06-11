@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+		<title></title>
+	</head>
+	<body background="img/fifth_bg.jpg">
+		<div class="container-fluid">
+              <div class="col-md-9">
+                  <div class="viewProjects">
+                  	<span>项目名称</span><input name="name" type="text" class="form-control" id="pName" placeholder="项目名称"><br />
+                  	<span>项目单位</span><input name="unit" type="text"  class="form-control" id="unit" placeholder="项目单位"><br />
+                  	<span>联系人    </span><input name="contact" type="text"  class="form-control" id="contact" placeholder="联系人"><br />
+                  	<span>手机号</span><input name="phone" type="text"  class="form-control" id="phone" placeholder="手机号"><br />
+                  	<span>专业类别</span><input name="majorType" type="text" class="form-control" id="majorType" placeholder="专业类别" disabled="disabled"><br />
+                  	<span>设计人员</span><input name="uName" type="text"  class="form-control" id="uName" placeholder="设计人员"><br />
+                  	<div class="view" style="display: none;"><a href='Webshell:hello'>查看图纸</a></div>
+                  	<span>审图人员</span><input name="checkName" type="text" class="form-control" id="checkName" placeholder="审图人员"><br />
+                  	<span>审图意见</span><input name="advise" type="text" class="form-control" id="advise" placeholder="审图意见" disabled="disabled"><br />
+                  	<span>审核人员</span><input name="authorizedName" type="text"  class="form-control" id="authorizedName" placeholder="审核人员"><br />
+                  	<span>审核结果</span><input name="result" type="text"  class="form-control" id="result" placeholder="审核结果" disabled="disabled"><br />
+                  	<button onclick="submit();"style="width: 100px;">提交修改</button>
+                  	<button onclick="cancel();" style="width: 100px;">返回</button>
+                  </div>
+              </div>
+          </div>
+	</body>
+	<script type="text/javascript" src="js/getParameter.js" ></script>
+	<script>
+		var uName = $.cookie("name");
+	    var uId = $.cookie('id');
+		var param = getParameter();
+		var pid = param['pid'];
+		var uName = param['uName'];
+		var pName = '';
+		var unitName = '';
+		var contactPerson = '';
+		var phone = '';
+		var marjorType = '';
+		var designer = '';
+		var checkName = '';
+		var authName = '';
+		$(document).ready(function(){
+			$.ajax({
+				type:"get",
+				url:"Project/find.do",
+				async:true,
+				dataType:'json',
+				data:{
+					id : pid
+				},
+				success:function(result){
+					if(result.state == 0){
+						var data = result.data;
+						pName = data.pName;
+						$("input#pName").val(pName);
+						unitName = data.unitName
+						$("input#unit").val(unitName);
+						phone = data.cPhone;
+						$("input#phone").val(phone);
+						/* pName = data.pName;
+						$("input#pName").val(pName); */
+						contactPerson = data.contacts;
+						$("input#contacty").val(contactPerson);
+						majorType = data.majorType;
+						$("input#majorType").val(majorType);
+						designer = data.uName;
+						$("input#uName").val(designer);
+						checkName = data.checkName;
+						$("input#checkName").val(checkName);						
+						$("input#advise").val(data.advise);
+						authName = data.authorizedName;
+						$("input#authorizedName").val(authName);
+						$("input#result").val(data.result);
+						if(data.blueprint!=null && data.blueprint.trim()!=''){
+							$("input#uName").attr("disabled","disabled");
+						}
+						if(data.advise!=null && data.advise.trim()!=''){
+							$("input#uName").attr("disabled","disabled");
+							$("input#checkName").attr("disabled","disabled");
+						}
+						if(data.result!=null && data.advise.trim()!=''){
+							$("input#uName").attr("disabled","disabled");
+							$("input#checkName").attr("disabled","disabled");
+							$("input#authorizedName").attr("disabled","disabled");
+						}
+					}else{
+						alert(result.message);
+					}
+				},error:function(){
+					//alert('发生了未知错误，请稍候重新尝试');
+				}
+			});
+		});
+		function check(){
+				if($("input#pName").val().trim() == ''){
+					alert('项目名称不能为空');
+					return false;
+				}
+				if($("input#unit").val().trim == ''){
+					alert('项目单位不能为空');
+					return false;
+				}
+				if($("input#phone").val().trim == ''){
+					alert('手机号不能为空');
+					return false;
+				}
+				var phoneReg = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
+				if(!$("input#phone").val().match(phoneReg)){
+					alert('请输入正确的手机号');
+					return false;
+				}
+				if($("input#majorType").val().trim == ''){
+					alert('工程类别不能为空');
+					return false;
+				}
+				return true;
+			}
+			function submit(){
+				if(!check()){
+					return;
+				}
+				var data = {};
+				if(pName != $("input#pName").val() && $("input#pName").val().trim()!=''){
+					data.pName = $("input#pName").val();
+				}
+				if(unitName != $("input#unit").val() && $("input#unit").val().trim()!=''){
+					data.unitName = $("input#unit").val();
+				}
+				if(phone != $("input#cPhone").val() && $("input#cPhone").val().trim()!=''){
+					data.cPhone = $("input#cPhone").val();
+				}
+				if(contactPerson != $("input#contact").val() && $("input#contact").val().trim()!=''){
+					data.contacts = $("input#contact").val();
+				}
+				var marjorType = '';
+				var designer = '';
+				var checkName = '';
+				var authName = '';
+				if(marjorType != $('input#majorType').val() && $("#majorType").val().trim()!=''){
+					data.majorType = $('input#majorType').val();
+				}
+				if(designer!=$('input#uName').val() && $("input#uName").val().trim()!=''){
+					data.uName = $('input#uName').val();
+				}
+				if(checkName != $("input#checkName").val() && $("input#checkName").val().trim()!=''){
+					data.checkName = $("input#checkName");
+				}
+				if(authName != $("input#authorizedName").val() && $("input#authorizedName").val().trim()!=''){
+					data.authName = $("input#authorizedName");
+				}
+				var str = JSON.stringfy(str);
+				if(str == '{}'){
+					alert('未改变任何数据，请改变数据后再提交修改请求');
+					return;
+				}
+				data.pid = pid;
+				$.ajax({
+					type:"post",
+					url:"Project/update.do",
+					async:true,
+					data:data,
+					dataType : 'json',
+					success : function(result){
+						if(result.state == 0){
+							alert('修改项目信息成功');
+							window.location.href = 'index.html?uName=' + uName;
+						}else{
+							alert(result.message);
+						}
+					},
+					error : function(){
+						//alert('发生了未知错误，请稍候重新尝试');
+					}
+				});
+			}
+		function cancel(){
+			window.location.href="index.html";
+		}
+	</script>
+</html>

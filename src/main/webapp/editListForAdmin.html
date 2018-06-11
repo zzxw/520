@@ -43,9 +43,9 @@
 	<script>
 		var uName = $.cookie("name");
 	    var uId = $.cookie('id');
-	    if(uName == null || typeof(uName)=='undefined' || uName.trim()==''){
-	    	alert('请登录');
-	    	window.location.href='userLogin.html';
+	    if(typeof(uName)=='undefined' || uName.trim()==''){
+	    	alert('请先登陆!!!');
+	    	window.location.href='login.html';
 	    }
 	    modifyProject(1);
 		function modifyProject(pageNo){
@@ -56,13 +56,10 @@
 	    	tbody.empty();
 	    	$.ajax({
 	    		type:"post",
-	    		url:"Project/searchProjectsByStatus.do",
+	    		url:"Project/Statistical.do",
 	    		async:true,
 	    		data:{
-	    			pn:1,
-	    			status:2,
-	    			id:uId,
-	    			type:'design'
+	    			pg:pageNo
 	    		},
 	    		dataType:'json',
 	    		success:function(result){
@@ -110,7 +107,7 @@
 	    }
 	    function modify(str){
 	    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
-	    	window.location.href = 'editProject1.html?pid=' + id + "&uName="+uName;
+	    	window.location.href = 'editProjectForAdmin.html?pid=' + id + "&uName="+uName;
 	    }
 	    function phoneCheck(){
 	    	var cPhone = $("#phone").val();
@@ -128,7 +125,7 @@
 	    	}
 	    }
 	    function back(){
-	    	window.location.href='index1.html';
+	    	window.location.href='index.html';
 	    }
 	</script>
 </html>

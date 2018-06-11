@@ -51,10 +51,12 @@ public class ProjectController extends BaseController{
 	@RequestMapping("/update.do")
 	@ResponseBody
 	public JsonResult<Project> update(
-			Integer uid,String name,Integer checkId,Integer authorizedId,Integer pid,Integer majorType,String pName,
-			Integer pType,String unitName,String contacts,String cPhone,Integer status,String blueprint,String advise){
+			Integer uid,Integer checkId,Integer authorizedId,Integer pid,Integer majorType,String pName,
+			Integer pType,String unitName,String contacts,String cPhone,Integer status,String blueprint,String advise,
+			String checkName,String authName,Integer result,String uName){
 		Project project = new Project();
 		project.setPid(pid);
+		project.setuName(uName);
 		project.setAuthorizedId(authorizedId);
 		project.setBlueprint(blueprint);
 		project.setCheckId(checkId);
@@ -67,6 +69,9 @@ public class ProjectController extends BaseController{
 		project.setUid(uid);
 		project.setUnitName(unitName);
 		project.setAdvise(advise);
+		project.setCheckName(checkName);
+		project.setAuthorizedName(authName);
+		project.setResult(result);
 		projectService.update(project);
 		return new JsonResult<Project>(project);
 	}
@@ -135,7 +140,7 @@ public class ProjectController extends BaseController{
 		return new JsonResult<Boolean>(true);
 	}
 	
-	@RequestMapping("/test.do")
+	@RequestMapping("/Statistical.do")
 	@ResponseBody
 	public JsonResult<PageInfo<List<Project>>> searchByPage(@RequestParam(value="pn", defaultValue="1")Integer pn){
 		PageHelper.startPage(pn,5);
