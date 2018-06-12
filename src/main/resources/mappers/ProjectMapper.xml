@@ -6,9 +6,9 @@
 	<insert id="add"
 		parameterType="cn.bs.entity.Project">
 		insert into projects
-(uid,checkId,authorizedId,majorType,pName,pType,unitName,contacts,cPhone,status) 
+(uid,checkId,authorizedId,majorType,pName,pType,unitName,contacts,cPhone,status,uName,checkName,authorizedName) 
 values
-(#{uid},#{checkId},#{authorizedId},#{majorType},#{pName},#{pType},#{unitName},#{contacts},#{cPhone},#{status})
+(#{uid},#{checkId},#{authorizedId},#{majorType},#{pName},#{pType},#{unitName},#{contacts},#{cPhone},#{status},#{uName},#{checkName},#{authorizedName})
 	</insert>
 	<delete id="delete" parameterType="int">
 	    delete 
@@ -85,6 +85,6 @@ values
 	<select id="viewProject"
 		parameterType="int"
 		resultType="cn.bs.entity.Project">
-		select * from projects where (uid=#{id} or checkid=#{id} or authorizedId=#{id})group by status
+		select * from projects where (uid=#{id} or checkid=#{id} or authorizedId=#{id})
 	</select>
 </mapper>

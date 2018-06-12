@@ -9,10 +9,10 @@
 		<div class="container-fluid">
               <div class="col-md-9">
                   <div class="viewProjects">
-                  <form action="file/upload.do" method="post" enctype="multipart/form-data"> 
+                  <form action="file/upload.do" method="post" enctype="multipart/form-data" onsubmit="return check();"> 
 	                  	<span>项目名称</span><input name="name" type="text" class="form-control" id="pName" placeholder="项目名称" disabled="disabled"><br />
 	                  	<span>项目单位</span><input name="unit" type="text"  class="form-control" id="unit" placeholder="项目单位" disabled="disabled"><br />
-	                  	<span>联系人    </span><input name="contact" type="text"  class="form-control" id="contacy" placeholder="联系人" disabled="disabled"><br />
+	                  	<span>联系人    </span><input name="contact" type="text"  class="form-control" id="contact" placeholder="联系人" disabled="disabled"><br />
 	                  	<span>手机号</span><input name="phone" type="text"  class="form-control" id="phone" placeholder="手机号" disabled="disabled"><br />
 	                  	<span>专业类别</span><input name="majorType" type="text" class="form-control" id="majorType" placeholder="专业类别" disabled="disabled"><br />
 	                  	<span>设计人员</span><input name="uName" type="text"  class="form-control" id="uName1" placeholder="设计人员" disabled="disabled"><br />
@@ -25,9 +25,9 @@
 	                  	<span>审图意见</span><input name="advise" type="text" class="form-control" id="advise" placeholder="审图意见" disabled="disabled"><br />
 	                  	<span>审核人员</span><input name="authorizedName" type="text"  class="form-control" id="NaauthorizedName" placeholder="审核人员" disabled="disabled"><br />
 	                  	<!--<button onclick="submit();"style="width: 100px;">提交修改</button>-->
-	                  	<input type="submit"  onclick="check();"value="上传">
-	                  	<button onclick="cancel();" style="width: 100px;">返回</button>
+	                  	<input type="submit"  onclick="check();"value="上传">	                  	
 	                  </form>
+	                  <button onclick="cancel();" style="width: 100px;">返回</button>
                   </div>
               </div>
           </div>
@@ -55,13 +55,14 @@
 						$("input#pName").val(data.pName);
 						$("input#unit").val(data.unitName);
 						$("input#phone").val(data.cPhone);
+						$("input#contact").val(data.contacts);
 						$("input#pName").val(data.pName);
 						$("input#majorType").val(data.majorType);
 						$("input#uName1").val(data.uName);
 						$("input#checkName").val(data.checkName);
 						$("input#authorizedName").val(data.authorizedName);
 						var bluePrint = data.blueprint;
-						if(bluePrint!='null' && bluePrint.trim()!=''){
+						if(bluePrint!=null && bluePrint.trim()!=''){
 							$("div.view").removeAttr("style");
 						}
 					}else{
@@ -125,7 +126,9 @@
 		function check(){
 			if($(".choose").get(0).getElementsByTagName('input')[0].files.length == 0){
 				alert('请选择文件并上传');
-				return;
+				return false;
+			}else{
+				return true;
 			}
 		}
 	</script>

@@ -64,7 +64,7 @@
                       <ul class="operate-project">
                       	<li><a href="addProject.html"class="active">新增项目</a></li>
                       	<li><a onclick="window.location.href='editListForAdmin.html';">修改项目</a></li>
-                      	<li><a onclick="window.location.href='modify.html';">查看项目</a></li>
+                      	<li><a onclick="window.location.href='viewProjectsForAdmin.html';">查看项目</a></li>
                       	<input type="text" hidden="hidden" id="uName"></input>
                       </ul>
                   </div>
@@ -160,6 +160,10 @@
 	    var uName = $.cookie("name");
 	    var uId = $.cookie('id');
 	    $("p.userInfo").html("欢迎您，" + uName);
+	    if(uName == 'null' || uName == null){
+	    	alert('请登录！！！');
+	    	window.location.href = 'login.html';
+	    }
 	    var phone = '';
 	    var mail = '';
 	    if(typeof(uName) == 'undefined' || uName.trim() == '') {

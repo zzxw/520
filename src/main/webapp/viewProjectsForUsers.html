@@ -57,24 +57,14 @@
 	    	}
 	    	var tbody = $(".projectBody");
 	    	tbody.empty();
-	    	var status = 2;
-	    	var type = 'design';
-	    	if(userType == 2){
-	    		status = 3;
-	    		type = 'check';
-	    	}else if(userType == 3){
-	    		status = 4;
-	    		type = 'auth';
-	    	}
 	    	$.ajax({
 	    		type:"post",
-	    		url:"Project/searchProjectsByStatus.do",
+	    		url:"Project/viewProjects.do",
 	    		async:true,
 	    		data:{
 	    			pn:1,
-	    			status:status,
 	    			id:uId,
-	    			type:type
+	    			userType:userType
 	    		},
 	    		dataType:'json',
 	    		success:function(result){
@@ -93,7 +83,7 @@
 	    					tr.append($("<td>" + data[i].uName + "</td>"));
 	    					tr.append($("<td>" + data[i].checkName + "</td>"));
 	    					tr.append($("<td>" + data[i].authorizedName + "</td>"));
-	    					var td = $("<td><button onclick='modify(this);'>修改项目</button></td>");
+	    					var td = $("<td><button onclick='view(this);'>查看</button></td>");
 	    					tr.append(td);
 	    					tbody.append(tr);
 	    				}
@@ -120,16 +110,9 @@
 	    		}
 	    	});
 	    }
-	    function modify(str){
+	    function view(str){
 	    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
-	    	if(userType ==2){
-	    		window.location.href = 'editProject2.html?pid=' + id + "&uName="+uName;	
-	    	}else if(userType ==3){
-	    		window.location.href = 'editProject3.html?pid=' + id + "&uName="+uName;
-	    	}else{
-	    		window.location.href = 'editProject1.html?pid=' + id + "&uName="+uName;
-	    	}
-	    	
+	    	window.location.href = 'viewProjectForUser.html?pid=' + id + "&uName="+uName;
 	    }
 	    function phoneCheck(){
 	    	var cPhone = $("#phone").val();

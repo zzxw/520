@@ -11,7 +11,7 @@
                   <div class="viewProjects">
 	                  	<span>项目名称</span><input name="name" type="text" class="form-control" id="pName" placeholder="项目名称" disabled="disabled"><br />
 	                  	<span>项目单位</span><input name="unit" type="text"  class="form-control" id="unit" placeholder="项目单位" disabled="disabled"><br />
-	                  	<span>联系人    </span><input name="contact" type="text"  class="form-control" id="contacy" placeholder="联系人" disabled="disabled"><br />
+	                  	<span>联系人   </span><input name="contact" type="text"  class="form-control" id="contact" placeholder="联系人" disabled="disabled"><br />
 	                  	<span>手机号</span><input name="phone" type="text"  class="form-control" id="phone" placeholder="手机号" disabled="disabled"><br />
 	                  	<span>专业类别</span><input name="majorType" type="text" class="form-control" id="majorType" placeholder="专业类别" disabled="disabled"><br />
 	                  	<span>设计人员</span><input name="uName" type="text"  class="form-control" id="uName1" placeholder="设计人员" disabled="disabled"><br />
@@ -22,7 +22,7 @@
 						<div class="authorized"> 
 	                  		<input type="radio" name="result" value='Y'/><label>通过</label>  
             				<input name="result" checked type="radio" value="N"/><label>不通过</label>  </div>
-	                  	<input type="button" onclick="submit();" value="上传">
+	                  	<input type="button" onclick="submit();" value="提交">
 	                  	<button onclick="cancel();" style="width: 100px;">返回</button>
                   </div>
               </div>
@@ -50,6 +50,7 @@
 					if(result.state == 0){
 						var data = result.data;
 						$("input#pName").val(data.pName);
+						$("input#contact").val(data.contacts);
 						$("input#unit").val(data.unitName);
 						$("input#phone").val(data.cPhone);
 						$("input#pName").val(data.pName);
@@ -72,11 +73,14 @@
 		function submit(){
 			var result = $('div.authorized input[name="result"]');
 			var status = 3;
-			var advise = $("#advise").val().trim();
+			var result = 0;
+			//var advise = $("#advise").val().trim();
 			if(typeof(result) =='undefined' || result == 'N'){
-				status =4;
+				status =3;
+				result = 1;
 			}else{
-				status = 3;
+				status = 4;
+				result = 1;
 			}
 			$.ajax({
 				type:"post",
@@ -85,6 +89,7 @@
 				dataType:'json',
 				data:{
 					status : status,
+					result : result,
 					pid : pid
 				},
 				success:function(result){

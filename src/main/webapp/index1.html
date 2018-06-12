@@ -62,9 +62,9 @@
                   <div class="col-md-9">
                       <h2>Overview</h2>
                       <ul class="operate-project">
-                      	<li><a href="#4"class="active" onclick="window.location.href='uploadProject.html'">上传图纸</a></li>
-                      	<li><a href="#5" onclick="window.location.href='editList.html'">修改图纸</a></li>
-                      	<li><a href="#" onclick="window.location.href='modify1.html';">查看项目</a></li>
+                      	<li><a class="active" onclick="uploadProject();" id="a4">上传图纸</a></li>
+                      	<li><a href="#" onclick="editList();" id="a5">修改图纸</a></li>
+                      	<li><a href="#" onclick="viewProjects();" id="a6">查看项目</a></li>
                       	<input type="text" hidden="hidden" id="uName"></input>
                       </ul>
                   </div>
@@ -147,7 +147,12 @@
     <script type="text/javascript">
     	var uName = $.cookie('uName');
 	    var uId = $.cookie('uId');
+	    var userType = 1;
 	    $("p.userInfo").html("欢迎您，" + uName);
+	    if(uName == 'null' || uName == null){
+	    	alert('请登录！！！');
+	    	window.location.href = 'userLogin.html';
+	    }
     	$(document).ready(function() {
 	        $('.scroll-link').on('click', function(event){
 	            event.preventDefault();
@@ -162,7 +167,32 @@
 	            event.preventDefault();
 	            $('#main-nav').toggleClass("open");
 	        });
+	        changeContent();
 	    });
+    	function changeContent(){
+    		$.ajax({
+    			type:"post",
+    			url:"nUser/find.do",
+    			async:true,
+    			dataType : 'json',
+    			data : {
+    				name : uName
+    			},
+    			success : function(result) {
+    				var data = result.data;
+    				if(result.state == 0){
+    					userType = data.userType;
+    				}
+    				if(userType == 2){
+    					$("#a4").html('审核图纸');
+    					$("#a5").html('修改审图意见');
+    				}else if(userType == 3){
+    					$("#a4").html('审核项目');
+    					$("#a5").html('修改审核结果');
+    				}
+    			}
+    		});
+    	}
 	    var phone = '';
 	    var mail = '';
 	    var oldAddress = "";
@@ -175,7 +205,7 @@
     	}
     	function managerUser(){
     		$.ajax({
-    			type:"get",
+    			type:"post",
     			url:"nUser/find.do",
     			async:true,
     			dataType : 'json',
@@ -386,66 +416,6 @@
 	    		}
 	    	});
 	    }
-	    /*function modifyProject(pageNo){
-	    	if(typeof(pageNo)=='undefined'){
-	    		pageNo = 1;
-	    	}
-	    	var tbody = $("div#5").find(".projectBody");
-	    	tbody.empty();
-	    	$.ajax({
-	    		type:"get",
-	    		url:"Project/searchProjectsByStatus.do",
-	    		async:true,
-	    		data:{
-	    			pg : pageNo,
-	    			status:2,
-	    			id:uId,
-	    			type:'design'
-	    		},
-	    		dataType:'json',
-	    		success:function(result){
-	    			if(result.state == 0){
-	    				tbody.empty();
-	    				var data = result.data.list;
-	    				for(var i=0;i<data.length;i++){
-	    					var item = data[i];
-	    					var tr = $("<tr></tr>");
-	    					tr.append($("<td style='display:none'>" + data[i].pid + "</td>"));
-	    					tr.append($("<td>" + data[i].pName + "</td>"));
-	    					tr.append($("<td>" + data[i].unitName + "</td>"));
-	    					tr.append($("<td>" + data[i].contacts + "</td>"));
-	    					tr.append($("<td>" + data[i].cPhone + "</td>"));
-	    					tr.append($("<td>" + data[i].pType + "</td>"));
-	    					tr.append($("<td>" + data[i].uid + "</td>"));
-	    					tr.append($("<td>" + data[i].checkId + "</td>"));
-	    					tr.append($("<td>" + data[i].authorizedId + "</td>"));
-	    					var td = $("<td><button onclick='upload(this);'>修改</button></td>");
-	    					tr.append(td);
-	    					tbody.append(tr);
-	    				}
-	    				var page = $(".pagination");
-	    				//page.append($("<li class=''>&laquo;</a></li>"));
-	    				for(var i=1;i<=result.data.lastPage;i++){
-	    					page.append($("<li class='>"+i+"'></li>"));
-	    				}
-	    				//page.append($("<li><a href='#'>&raquo;</a></li>"));
-	    				var ul = $("li");
-	    				for(var i=0;i<ul.length;i++){
-	    					var li = ul.get(i);
-	    					li.addEventListener('click',function(evt){
-								var pn = this.getAttribute('class');
-								view(0,pn);
-							});
-	    				}
-	    			}else{
-	    				alert(result.message);
-	    			}
-	    		},
-	    		error:function(){
-	    			alert('发生了未知错误，请检查网络后重新尝试');
-	    		}
-	    	});
-	    }*/
 	    function modifyUserInfo(){
 	    	if(!phoneCheck()){
 	    		return;
@@ -527,9 +497,9 @@
 				success:function(result){
 					if(result.state == 0){
 						var userType = result.data.userType;
-						if(userType == 0){
+						if(userType == 1){
 							window.location.href = 'editProject1.html?pid=' + uId + "&uName="+uName;	
-						}else if(userType ==1){
+						}else if(userType ==2){
 							window.location.href = 'editProject2.html?pid=' + uId + "&uName="+uName + "userType=" + userType;
 						}else{
 							window.location.href = 'editProject3.html?pid=' + uId + "&uName="+uName + "userType=" + userType;
@@ -545,6 +515,15 @@
 	    	$.cookie("uName",null);
 			$.cookie("uId",null);
 			window.location.href = 'userLogin.html';
+	    }
+	    function uploadProject(){
+	    	window.location.href='uploadProject.html?type=' + userType;
+	    }
+	    function editList(){
+	    	window.location.href='editList.html?type=' + userType;
+	    }
+	    function viewProjects(){
+	    	window.location.href='viewProjectsForUsers.html?type=' + userType;
 	    }
     </script>
 </body>

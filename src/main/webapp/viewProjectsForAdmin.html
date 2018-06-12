@@ -7,7 +7,6 @@
 		<script type="text/javascript" src="img/js/jquery-3.2.0.min.js" ></script>
 		<script type="text/javascript" src="js/jquery.cookie.js" ></script>
 		<script type="text/javascript" src="img/js/vendor/bootstrap.js" ></script>
-		<script type="text/javascript" src="js/getParameter.js"></script>
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<link rel="stylesheet" href="css/bootstrap-theme.css" />
 		<title></title>
@@ -42,39 +41,25 @@
           <div><button onclick="back();">返回首页</button></div>                
 	</body>
 	<script>
-		var param = getParameter();
-	    var userType = param.type;
-		var uName = $.cookie("uName");
-	    var uId = $.cookie('uId');
-	    if(uName == null || typeof(uName)=='undefined' || uName.trim()==''){
-	    	alert('请登录');
-	    	window.location.href='userLogin.html';
+		var uName = $.cookie("name");
+	    var uId = $.cookie('id');
+	    if(typeof(uName)=='undefined' || uName.trim()==''){
+	    	alert('请先登陆!!!');
+	    	window.location.href='login.html';
 	    }
-	    modifyProject(1);
-		function modifyProject(pageNo){
+	    viewProjects(1);
+		function viewProjects(pageNo){
 	    	if(typeof(pageNo)=='undefined'){
 	    		pageNo = 1;
 	    	}
 	    	var tbody = $(".projectBody");
 	    	tbody.empty();
-	    	var status = 2;
-	    	var type = 'design';
-	    	if(userType == 2){
-	    		status = 3;
-	    		type = 'check';
-	    	}else if(userType == 3){
-	    		status = 4;
-	    		type = 'auth';
-	    	}
 	    	$.ajax({
 	    		type:"post",
-	    		url:"Project/searchProjectsByStatus.do",
+	    		url:"Project/Statistical.do",
 	    		async:true,
 	    		data:{
-	    			pn:1,
-	    			status:status,
-	    			id:uId,
-	    			type:type
+	    			pg:pageNo
 	    		},
 	    		dataType:'json',
 	    		success:function(result){
@@ -93,7 +78,7 @@
 	    					tr.append($("<td>" + data[i].uName + "</td>"));
 	    					tr.append($("<td>" + data[i].checkName + "</td>"));
 	    					tr.append($("<td>" + data[i].authorizedName + "</td>"));
-	    					var td = $("<td><button onclick='modify(this);'>修改项目</button></td>");
+	    					var td = $("<td><button onclick='viewProject(this);'>查看</button></td>");
 	    					tr.append(td);
 	    					tbody.append(tr);
 	    				}
@@ -120,16 +105,9 @@
 	    		}
 	    	});
 	    }
-	    function modify(str){
+	    function viewProject(str){
 	    	var id = str.parentNode.parentNode.childNodes[0].childNodes[0].nodeValue;
-	    	if(userType ==2){
-	    		window.location.href = 'editProject2.html?pid=' + id + "&uName="+uName;	
-	    	}else if(userType ==3){
-	    		window.location.href = 'editProject3.html?pid=' + id + "&uName="+uName;
-	    	}else{
-	    		window.location.href = 'editProject1.html?pid=' + id + "&uName="+uName;
-	    	}
-	    	
+	    	window.location.href = 'viewProject.html?pid=' + id + "&uName="+uName;
 	    }
 	    function phoneCheck(){
 	    	var cPhone = $("#phone").val();
@@ -147,7 +125,7 @@
 	    	}
 	    }
 	    function back(){
-	    	window.location.href='index1.html';
+	    	window.location.href='index.html';
 	    }
 	</script>
 </html>

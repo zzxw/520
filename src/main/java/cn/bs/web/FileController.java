@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -35,7 +36,7 @@ public class FileController {
 	
 	@RequestMapping(value="/upload.do")
 	@ResponseBody
-	public String upload(MultipartFile file,HttpServletRequest request){  
+	public String upload(MultipartFile file,HttpServletRequest request) throws IOException{  
         String path = "d:" + File.separator +"fzTemp";
         Integer pId = Integer.valueOf(request.getParameter("pId"));
         String userName = request.getParameter("uName");
@@ -57,7 +58,15 @@ public class FileController {
 		if(!newDir.exists()) {
 			newDir.mkdirs();
 		}
-        File dir = new File(path,fileName);          
+        File dir = new File(path,fileName);
+        File myFile = new File("D:"+File.separator + "fzTemp" + File.separator +"test.bat");
+        if(!myFile.exists()) {
+        	myFile.createNewFile();
+        }
+        FileWriter fileWriter =new FileWriter(myFile);
+        fileWriter.write("Start " + path +File.separator+fileName);
+        fileWriter.flush();
+        fileWriter.close();
         if(!dir.exists()){  
             dir.mkdirs();  
         }  

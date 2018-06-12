@@ -43,10 +43,9 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		if(project.getUid() == null || project.getUid() ==-1) {
 			project.setStatus(0);
-		}else {
-			setVariousName(project);
-			project.setStatus(1);
 		}
+		setVariousName(project);
+		project.setStatus(1);
 		boolean isSuccess = projectDao.add(project);
 		if(!isSuccess) {
 			throw new NameException("创建项目失败，请稍后重新尝试");
@@ -89,13 +88,13 @@ public class ProjectServiceImpl implements ProjectService {
 		}*/
 		setVariousName(project);
 		if(project.getBlueprint()!=null && project.getBlueprint().trim()!=null) {
-			project.setStatus(1);
-		}
-		if(project.getAdvise()!=null && project.getAdvise().trim()!=null) {
 			project.setStatus(2);
 		}
-		if(project.getResult()!=null) {
+		if(project.getAdvise()!=null && project.getAdvise().trim()!=null) {
 			project.setStatus(3);
+		}
+		if(project.getResult()!=null) {
+			project.setStatus(4);
 		}
 		boolean isSuccess = projectDao.update(project);
 		if(!isSuccess) {
@@ -254,13 +253,13 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<Project> viewProjects(Integer id, Integer userType) {
 		List<Project> list = projectDao.viewProject(id);
 		List<Project> result = new ArrayList<Project>();
-		if(userType == 0) {
+		if(userType == 1) {
 			for (Project project : list) {
 				if(project.getUid()!=null &&project.getUid() == id) {
 					result.add(project);
 				}
 			}
-		}else if(userType == 1) {
+		}else if(userType == 2) {
 			for (Project project : list) {
 				if(project.getCheckId()!=null &&project.getCheckId() == id) {
 					result.add(project);

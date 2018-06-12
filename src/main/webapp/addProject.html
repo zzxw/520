@@ -66,7 +66,9 @@
 				<div class="control-group">
 					<div class="controls">
 						 <button id="form-submit" class="btn">增加工程</button>
-						 <button id="cancel();" class="cancel">返回</button>
+					</div>
+					<div class="controls">
+						<button onclick="cancel();" class="cancel">返回</button>
 					</div>
 				</div>
 		</div>
@@ -100,21 +102,23 @@
 	    	var uId2 = uId.val().trim() == ''?-1:uId.val();
 	    	var checkId2 = checkId.val().trim() == ''?-1:checkId.val();
 	    	var authorizedId2 = authorizedId.val().trim() == ''?-1:authorizedId.val();
+	    	var data = {
+    			pName : pName.val(),
+    			unitName : unitName.val(),
+    			contacts : contacts.val(),
+    			cPhone : cPhone.val(),
+    			pType : pType.val(),
+    			uid : uId2,
+    			checkId : checkId2,
+    			authorizedId : authorizedId2
+    		};
+	    	console.log(data);
 	    	$.ajax({
 	    		type:"post",
 	    		url:"Project/add.do",
 	    		async:true,
 	    		dataType : 'json',
-	    		data : {
-	    			pName : pName.val(),
-	    			unitName : unitName.val(),
-	    			contacts : contacts.val(),
-	    			cPhone : cPhone.val(),
-	    			pType : pType.val(),
-	    			uId : uId2,
-	    			checkId : checkId2,
-	    			authorizedId : authorizedId2
-	    		},
+	    		data : data,
 	        	success:function(result){
 	        		if(result.state == 0){
 	        			pName.val('');
