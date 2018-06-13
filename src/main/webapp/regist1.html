@@ -28,6 +28,11 @@
 			<br/><span style="background-color: #398439;">专业类别</span><select class="major"><option value="0">设施</option>
 			<option value="1">桥梁</option><option value="2">房屋</option><option value="3">建筑</option>
 			</select>
+			<br/><span style="background-color: #398439;">身份类型</span><select class="userType">
+				<option value="1">设计人员</option>
+				<option value="2">审图人员</option>
+				<option value="3">审核人员</option>
+			</select>
 			<div class="send-button w3layouts agileits">
 				<input type="button" value="免费注册" onclick="submit();">
 			</div>
@@ -80,7 +85,7 @@
 			mail : $(".mail").val(),
 			address : $(".add").val(),
 			major : $(".major").val(),
-			userType : 0
+			userType :$(".userType").val()
 		}
 		$.ajax({
 			type:"post",	

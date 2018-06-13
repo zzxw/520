@@ -46,8 +46,11 @@
 		var phone = '';
 		var marjorType = '';
 		var designer = '';
+		var designerId = '';
 		var checkName = '';
+		var checkId = '';
 		var authName = '';
+		var authId = ''; 
 		function sendRequest(type,url,data,successFunction){
 	    	$.ajax({
 	    		type:type,
@@ -85,6 +88,9 @@
 						majorType = data.majorType;
 						$("input#majorType").val(majorType);
 						designer = data.uName;
+						designerId = data.uid;
+						checkId = data.checkId; 
+						authId = data.authorizedId;
 						var myDesign = $("select#uId");
 						var myCheck = $("select#checkId");
 				    	var myCheck2 = $("select#authorizedId");
@@ -106,7 +112,7 @@
 						if(designer == null || designer.trim()==''){
 							sendRequest("post","nUser/findUsersByMajor.do",{major:majorType,userType:1},successFunction(myDesign));
 						}else{
-							var option = $("<option value='"+designer+"'>"+designer+"</option>");
+							var option = $("<option value='"+data.uid+"'>"+designer+"</option>");
 							myDesign.append(option);
 							myDesign.attr("disabled","disabled");
 						}
@@ -114,7 +120,7 @@
 						if(checkName == null || checkName.trim() == ''){
 							sendRequest("post","nUser/findUsersByMajor.do",{major:majorType,userType:2},successFunction(myCheck));
 						}else{
-							var option = $("<option value='"+checkName+"'>"+checkName+"</option>");
+							var option = $("<option value='"+data.checkId+"'>"+checkName+"</option>");
 							myCheck.append(option);
 							myCheck.attr("disabled","disabled");
 						}						
@@ -124,7 +130,7 @@
 						if(authName == null || authName.trim() == ''){
 							sendRequest("post","nUser/findUsersByMajor.do",{major:majorType,userType:3},successFunction(myCheck2));
 						}else{
-							var option = $("<option value='"+authName+"'>"+authName+"</option>");
+							var option = $("<option value='"+data.authorizedId+"'>"+authName+"</option>");
 							myCheck2.append(option);
 							myCheck2.attr("disabled","disabled");
 						}
@@ -191,20 +197,16 @@
 				if(contactPerson != $("input#contact").val() && $("input#contact").val().trim()!=''){
 					data.contacts = $("input#contact").val();
 				}
-				var marjorType = '';
-				var designer = '';
-				var checkName = '';
-				var authName = '';
-				if(marjorType != $('input#majorType').val() && $("#majorType").val().trim()!=''){
+				if(majorType != $('input#majorType').val() && $("#majorType").val().trim()!=''){
 					data.majorType = $('input#majorType').val();
 				}
-				if(designer!=$('select#uId').val() && $("select#uId").val().trim()!=''){
+				if(designerId!=$('select#uId').val() && $("select#uId").val().trim()!=''){
 					data.uName = $('select#uId').val();
 				}
-				if(checkName != $("select#checkId").val() && $("select#checkId").val().trim()!=''){
+				if(checkId != $("select#checkId").val() && $("select#checkId").val().trim()!=''){
 					data.checkName = $("select#checkId").val();
 				}
-				if(authName != $("select#authorizedId").val() && $("select#authorizedId").val().trim()!=''){
+				if(authId != $("select#authorizedId").val() && $("select#authorizedId").val().trim()!=''){
 					data.authorizedId = $("select#authorizedId").val();
 				}				
 				console.log(data);

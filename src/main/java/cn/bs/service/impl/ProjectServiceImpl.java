@@ -54,10 +54,11 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 	
 	public void onInit() {
-		MAPPER.put(0, "待设计");
-		MAPPER.put(1, "待审核");
-		MAPPER.put(2, "待审查");
-		MAPPER.put(3, "已完成");
+		MAPPER.put(0, "待分配");
+		MAPPER.put(1, "待设计");
+		MAPPER.put(2, "待审核");
+		MAPPER.put(3, "待审查");
+		MAPPER.put(4, "已完成");
 	}
 	
 	public String setName(Integer id,String errMsg) {
@@ -214,7 +215,7 @@ public class ProjectServiceImpl implements ProjectService {
 		List<HashMap<String,String>> data = new ArrayList<HashMap<String,String>>();
 		for (Result result : list) {
 			HashMap<String, String> map = new HashMap<String, String>();
-			Integer status = result.getCount();
+			Integer status = result.getStatus();
 			status = status==null?0:status;
 			Integer count = result.getCount();
 			count = count==null?0:count;
